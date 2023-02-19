@@ -22,7 +22,12 @@ header {
   text-align: right;
 }
 
-header p, h1{
+header p {
+  font-size: 24px;
+  color: #fff;
+}
+
+header h1{
   font-size: 24px;
   color: #fff;
 }

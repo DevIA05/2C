@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('t', views.testpage, name='test'),
     path('app/', include('model.urls')),
+    path('', include('labo.urls')),
 ]

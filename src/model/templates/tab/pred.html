@@ -1,20 +1,260 @@
-<div id="c0">
-    <div id="c1"> 
-      <button>B1 </button> 
-      <button>B1 </button> 
-    </div>
-    <div id="c2"> 
-      <div id="c3"> Partie filtres 
-        <div class="dropdown">
-            <button onclick="myFunction()"class="dropbtn">Dropdown</button>
-              <div id="myDropdown" class="dropdown-content">
-                <a href="#">Itération 1</a>
-                <a href="#">Itération 2</a>
-                <a href="#">Itération 3</a>
-              </div>
-           </div>
-      
+{% load static %}
+
+<!--   C0   -->
+<div class="container-fluid">
+  <!--    C1    -->
+      <div class="d-flex justify-content-between">
+        <div>
+          <button class="btn btn-primary mr-2">Train</button>
+          <button class="btn btn-secondary">Test</button>
+        </div>
+        <button class="btn btn-danger">Ajouter image</button>
       </div>
-      <div id="c4"> Partie image</div>
-    </div>
-  </div>
+      <br>
+  <!--    C2    -->
+      <div class="container-fluid">
+        <div class="row">
+  <!--     C3   -->
+          <div class="col-2"> Partie filtres 
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Modele
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Itération 1</a></li>
+                <li><a class="dropdown-item" href="#">Itération 2</a></li>
+                <li><a class="dropdown-item" href="#">Itération 3</a></li>
+              </ul>
+            </div>
+            
+            <div class="card" style="width: 18rem;">
+              <div class="card-body">
+                <h5 class="card-title">Catégorie</h5>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Option 1
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Option 2
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Option 3
+                  </label>
+                </div>
+              </div>
+            </div> 
+          </div>
+  <!--    C4    -->
+          <div class="col-10">
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+              <div class="col">
+                <!-- Card -->
+                <div class="card" style="width: 12rem;">
+                  <img src="{% static 'img/test.png' %}" class="card-img-top" alt="Avatar">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Launch demo modal
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Détail prédiction</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="container">
+                              <div class="row">
+                                <div class="col-lg-8 col-md-8 col-sm-12"> <!-- Div plus grande à gauche -->
+                                  <img src="https://www.w3schools.com/howto/img_avatar.png" class="img-thumbnail" alt="Avatar">
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-12"> <!-- Div plus petite à droite -->
+                                  <div>
+                                  <h5 class="button-title">Selection catégorie</h5>
+                                  <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Catégorie
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a class="dropdown-item" href="#">Catégorie 1</a></li>
+                                      <li><a class="dropdown-item" href="#">Catégorie 2</a></li>
+                                      <li><a class="dropdown-item" href="#">Catégorie 3</a></li>
+                                    </ul>
+                                  </div>
+                                  
+                                   <h5 class="title">Crée catégorie</h5>
+                                    <div class="input-group mb-3">
+                                      <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                                    </div>
+                                    
+                                    
+                                    
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            
+                            <div class="table-responsive-sm">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">First</th>
+                                    <th scope="col">Last</th>
+                                    <th scope="col">Handle</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th scope="row">1</th>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                  </tr>
+                                  <tr>
+                                    <th scope="row">2</th>
+                                    <td>Jacob</td>
+                                    <td>Thornton</td>
+                                    <td>@fat</td>
+                                  </tr>
+                                  <tr>
+                                    <th scope="row">3</th>
+                                    <td colspan="2">Larry the Bird</td>
+                                    <td>@twitter</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            
+                            
+                            
+                            
+                            
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <!-- Card -->
+                <div class="card" style="width: 12rem;">
+                  <img src="{% static 'img/test.png' %}" class="card-img-top" alt="Avatar">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Launch demo modal
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ...
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <!-- Card -->
+                <div class="card" style="width: 12rem;">
+                  <img src="{% static 'img/test.png' %}" class="card-img-top" alt="Avatar">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Launch demo modal
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ...
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <!-- Card -->
+                <div class="card" style="width: 12rem;">
+                  <img src="{% static 'img/test.png' %}" class="card-img-top" alt="Avatar">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      Launch demo modal
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            ...
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>

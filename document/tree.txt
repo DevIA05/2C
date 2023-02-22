@@ -1,0 +1,38 @@
+.
+│   manage.py
+│
+├───identification
+│   │   urls.py
+│   │   views.py
+│   │
+│   ├───static
+│   │   ├───css
+│   │   │       login.css
+│   │   │
+│   │   └───js
+│   └───templates
+│           login.html
+│
+├───main
+│   │   models.py
+│   │   settings.py
+│   │   urls.py
+│   │
+│   ├───static
+│       └───image
+│
+└───model
+    │   urls.py
+    │   views.py
+    │
+    ├───static
+    │   ├───css
+    │   │       collapsibles.css
+    │   │
+    │   └───js
+    │           animation.js
+    │
+    └───templates
+        │   collapsibles.html
+        │
+        |   model.html

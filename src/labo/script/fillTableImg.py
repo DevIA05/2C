@@ -1,21 +1,11 @@
-from django.shortcuts import render
-import pdb; #pdb.set_trace()
 from labo.models import MultipleImage
-
+import os
+from PIL import Image
 import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-# Create your views here.
-def page_test(request):
-    if request.method == "POST":
-        images = request.FILES.getlist('images')
-        pdb.set_trace()
-        # inject in database
-        return render(request, 'test.html')
-    else:
-        images = MultipleImage.objects.all()
-        return render(request, 'test.html', {'images': images})
-    
+print("working dir: " + os.getcwd())
+
 
 def save_image(image, filename):
     
@@ -37,3 +27,11 @@ def save_image(image, filename):
     
     # Add image in model
     MultipleImage.objects.create(images=file)
+
+
+path = "labo/static/img/upload"
+for file in os.listdir(path):
+    if file != "Thumbs.db":
+        print(os.path.join(path, file))
+        img = Image.open(os.path.join(path, file))
+        save_image(image=img, filename=file)

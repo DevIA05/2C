@@ -11,10 +11,10 @@ def page_test(request):
         images = request.FILES.getlist('images')
         pdb.set_trace()
         # inject in database
-        return render(request, 'test.html')
-    else:
-        images = MultipleImage.objects.all()
-        return render(request, 'test.html', {'images': images})
+    #    return render(request, 'test.html')
+    images = MultipleImage.objects.all()
+    print(type(images))
+    return render(request, 'test.html', {'images': images})
     
 
 def save_image(image, filename):
@@ -34,6 +34,6 @@ def save_image(image, filename):
         buffer.getbuffer().nbytes,  # File size
         None,  # Charset
     )
-    
     # Add image in model
-    MultipleImage.objects.create(images=file)
+    # MultipleImage.objects.create(images=file)
+    return file 

@@ -25,13 +25,14 @@ def save_image(image, filename):
         None,  # Charset
     )
     
-    # Add image in model
-    MultipleImage.objects.create(images=file)
+    return file
 
-
-path = "labo/static/img/upload"
+path = "labo/static/img/possesses"
 for file in os.listdir(path):
     if file != "Thumbs.db":
         print(os.path.join(path, file))
         img = Image.open(os.path.join(path, file))
-        save_image(image=img, filename=file)
+        # Transform img to InMemoryUploadedFile
+        muf = save_image(image=img, filename=file)
+        # Add image in model
+        MultipleImage.objects.create(images=muf)

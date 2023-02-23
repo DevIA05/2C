@@ -16,18 +16,17 @@ input.addEventListener('change', () => {
             reader.addEventListener('load', () => {
                 const img = new Image();
                 img.src = reader.result;
-
                 const card_html = `
         <div class="card" style="width: 12rem;">
-        <img src="${img.src}" class="card-img-top" alt="Avatar">
+        <img src="${img.src}" id = "${file.name}" class="card-img-top" alt="Avatar">
         <div class="card-body">
           <h5 class="card-title">${file.name}</h5>
           
           <!-- Button trigger modal -->
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button onclick="view_details(this)" type="button" name="${file.name}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
             Voir détails
           </button>
-      
+
           <!-- Modal -->
           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -65,7 +64,7 @@ input.addEventListener('change', () => {
                         </div>
                           <div>
                             <button onclick="show_pred()" class="btn btn-secondary" type="button">Prédire</button> 
-                            <h5 id="h5_pred"></h5>
+                            <h5 id="pred_${file.name}"></h5>
                           </div>
                         </div>
                       </div>
@@ -91,7 +90,3 @@ input.addEventListener('change', () => {
         }
     }
 });
-
-function show_pred() {
-  document.getElementById("h5_pred").innerHTML ="prediction";
-}

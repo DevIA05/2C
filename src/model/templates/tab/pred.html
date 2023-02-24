@@ -1,5 +1,11 @@
 {% load static %}
 
+<form method="post">
+  {% csrf_token %}
+  <!-- Your form fields go here -->
+</form>
+
+
 <!--   C0   -->
 <div class="container-fluid">
   <!--    C1    -->
@@ -56,8 +62,8 @@
           </div>
   <!--    C4    -->
           <div  class="col-10">
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-              <div id ='container_img' class="col">
+            <div id ='container_img' class="row row-cols-1 row-cols-md-6 g-2">
+              <div  class="col">
                 <!-- Card -->
                 <div class="card" style="width: 12rem;">
                   <img src="{% static 'img/test.png' %}" class="card-img-top" alt="Avatar">

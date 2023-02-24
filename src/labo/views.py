@@ -1,7 +1,7 @@
 from django.shortcuts import render
 import pdb; #pdb.set_trace()
 from labo.models import MultipleImage
-
+import base64
 import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
 

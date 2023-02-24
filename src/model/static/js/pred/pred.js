@@ -8,7 +8,7 @@ input.addEventListener('change', () => {
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         counter++;
-        const file_name = file.name + "_" + counter;
+        const file_name = file.name;
 
         if (file) {
             const reader = new FileReader();
@@ -24,7 +24,7 @@ input.addEventListener('change', () => {
                   <h5 class="card-title">
                     ${file_name}
                   </h5>
-                  <button onclick="view_details(this)" type="button" name="${counter}_${file_name}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal_${counter}_${file_name}">Voir détails</button>
+                  <button onclick="view_details(this)" type="button" name="${file_name}" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal_${counter}_${file_name}">Voir détails</button>
                   <div class="modal fade" id="exampleModal_${counter}_${file_name}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-xl">
                       <div class="modal-content">
@@ -59,7 +59,7 @@ input.addEventListener('change', () => {
                                   </div>
                                   <div>
                                     <button onclick="show_pred()" class="btn btn-secondary" type="button">Prédire</button>
-                                    <h4 id="pred_${counter}_${file_name}"></h4>
+                                    <h4 id="pred_${file_name}"></h4>
                                     </div>
                                 </div>
                               </div>

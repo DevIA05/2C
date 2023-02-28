@@ -1,15 +1,29 @@
 const input = document.getElementById('images');
 const preview = document.getElementById('container_img');
+const list_modele = ["M1", "M2", "M3"]
+
+function fill_dropdown(){
+  const ul = document.createElement("ul");
+  ul.classList.add("dropdown-menu");
+
+  for (let i = 0; i < list_modele.length; i++) {
+    const li = document.createElement("li");
+    li.classList.add("dropdown-item");
+    li.textContent = `${list_modele[i]}`;
+    ul.appendChild(li);
+  }
+  return ul
+}
+
 
 input.addEventListener('change', () => {
     const files = input.files;
-
+    const func_drop = fill_dropdown()
     let counter = 0;
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         counter++;
         const file_name = file.name;
-
         if (file) {
             const reader = new FileReader();
 
@@ -40,8 +54,23 @@ input.addEventListener('change', () => {
                               </div>
                               <div class="col-lg-4 col-md-4 col-sm-12">
                                 <div>
-                                  <h5 class="button-title">
-                                    Selection catégorie
+                                  <h5>Choisir le modèle</h5>
+                                  <div id="id_btn_modele" class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Modele
+                                    </button>
+                                    ${func_drop.outerHTML}
+                                  </div>
+                                  <h5>Le modèle choisi est</h5>
+                                  <br><br>
+                                  <div>
+                                    <button onclick="show_pred()" class="btn btn-secondary" type="button">Prédire</button>
+                                    <h4 id="pred_${file_name}"></h4>
+                                    </div>
+                                </div>
+                            
+                                <h5 class="button-title">
+                                    Faire le monitoring
                                   </h5>
                                   <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégorie</button>
@@ -57,18 +86,13 @@ input.addEventListener('change', () => {
                                     </h5>
                                     <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                   </div>
-                                  <div>
-                                    <button onclick="show_pred()" class="btn btn-secondary" type="button">Prédire</button>
-                                    <h4 id="pred_${file_name}"></h4>
-                                    </div>
-                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                         <div class="modal-footer">
                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary">Save changes</button>
+                          <button type="button" class="btn btn-primary">Sauvegarde pour le monitoring</button>
                         </div>
                       </div>
                     </div>

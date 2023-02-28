@@ -1,17 +1,21 @@
 from django.shortcuts import render
 import pdb; #pdb.set_trace()
-from labo.models import MultipleImage
+from model.models import MultipleImage
 from django.http import JsonResponse
 import base64
 import io
 from PIL import Image
 import random
+
+# from django.conf.settings import PATH_IMG_INVALIDED, PATH_IMG_POSSESSED
+from django.conf import settings
+
 # Create your views here.
 
 def page_model(request):
-    images = MultipleImage.objects.all()
-    print(type(images))    
-    return render(request, 'model.html',  {'images': images})
+    # images = MultipleImage.objects.all()
+    print(settings.PATH_IMG_INVALIDED)
+    return render(request, 'model.html')
 
 
 def makesThePrediction(request):

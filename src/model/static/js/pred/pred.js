@@ -2,6 +2,36 @@ const input = document.getElementById('images');
 const preview = document.getElementById('container_img');
 const list_modele = ["M1", "M2", "M3"]
 
+const dict_label = [
+  { label: "chien", accuracy: 0.5 },
+  { label: "chat", accuracy: 0.6 },
+  { label: "pizza", accuracy: 0.9 },
+  { label: "burger", accuracy: 0.4 },
+  { label: "frite", accuracy: 0.2 }
+];
+
+
+dict_label.forEach((item) => {
+  console.log(item.label, item.accuracy);
+});
+
+function fill_categorie() {
+  const ul = document.createElement("ul");
+  ul.classList.add("dropdown-menu");
+
+  const labels = dict_label.map((item) => item.label);
+  console.log(labels);
+  for (let i = 0; i < labels.length; i++) {
+    const li = document.createElement("li");
+    li.classList.add("dropdown-item");
+    li.textContent = `Label: ${labels[i]}`;
+    ul.appendChild(li);
+    
+  }
+  return ul
+}
+
+
 function fill_dropdown(id){
   const ul = document.createElement("ul");
   ul.classList.add("dropdown-menu");
@@ -24,8 +54,8 @@ input.addEventListener('change', () => {
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        
-        
+
+        let fill_cat = fill_categorie()
         const file_name = file.name;
         const id = "id" + i;
         const func_drop = fill_dropdown(i)
@@ -33,7 +63,6 @@ input.addEventListener('change', () => {
             const reader = new FileReader();
           
             reader.addEventListener('load', () => {
-              console.log(i);
                 const img = new Image();
                 img.src = reader.result;
                 const card = document.createElement("div")
@@ -81,11 +110,7 @@ input.addEventListener('change', () => {
                                     </h5>
                                     <div class="dropdown">
                                       <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégorie</button>
-                                      <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Catégorie 1</a></li>
-                                        <li><a class="dropdown-item" href="#">Catégorie 2</a></li>
-                                        <li><a class="dropdown-item" href="#">Catégorie 3</a></li>
-                                      </ul>
+                                      ${fill_cat.outerHTML}
                                     </div>
                                     <div class="input-group mb-3">
                                       <h5 class="title">
@@ -120,7 +145,6 @@ input.addEventListener('change', () => {
 
 
 function select_btn(button, i) {
-  console.log(button.id)
   const dropdownItems = document.querySelectorAll('.dropdown-item.cli' + i);
   let btn = document.getElementById(button.id)
   dropdownItems.forEach(item => {

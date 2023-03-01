@@ -14,12 +14,12 @@ from django.conf import settings
 
 def page_model(request):
     # images = MultipleImage.objects.all()
-    print(settings.PATH_IMG_INVALIDED)
+    #print(settings.PATH_IMG_INVALIDED)
     return render(request, 'model.html')
 
 
 def makesThePrediction(request):
-    # print(request.POST)
+    pdb.set_trace()
     imgB64 = request.POST.get('result[image]')
     imgname = request.POST.get('result[name]')
     nombre_aleatoire = random.uniform(0.5, 1)

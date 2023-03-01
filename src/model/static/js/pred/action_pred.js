@@ -1,12 +1,12 @@
 let name_img; 
-
+let id_btn;
 function view_details(button) { 
-    name_img = button.getAttribute('name') 
+    name_img = button.getAttribute('name')
 }
 
-function show_pred() {
-
-    const dataURL = imgToBase64(name_img)
+function show_pred(i) {
+    id_btn = i
+    const dataURL = imgToBase64("img_id" + id_btn)
 
     d = {"name": name_img, "image": dataURL}
     dataRequest(d)
@@ -49,8 +49,7 @@ function dataRequest(d){
         success: function (response) {
             const acc = response["acc"]
             const imgname = response["name"]
-            console.log(imgname)
-            const h5 = document.getElementById("pred_" + imgname)
+            const h5 = document.getElementById("pred_id" + id_btn)
             h5.innerHTML = acc
         },
         failure: function () {

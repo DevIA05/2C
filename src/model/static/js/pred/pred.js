@@ -2,6 +2,17 @@ const input = document.getElementById('images');
 const preview = document.getElementById('container_img');
 const list_modele = ["M1", "M2", "M3"]
 
+
+let test_mod = [ {name_Modele : 'M1',
+                  list_Label : ['Chien', 'Chat', 'Tortue']},
+                  {name_Modele : 'M1',
+                  list_Label : ['Clavier', 'Souris', 'Ecran']},
+                  {name_Modele : 'M1',
+                  list_Label : ['Chaise', 'Bureau', 'pizza']},
+];
+
+
+
 const dict_label = [
   { label: "chien", accuracy: 0.5 },
   { label: "chat", accuracy: 0.6 },
@@ -10,17 +21,14 @@ const dict_label = [
   { label: "frite", accuracy: 0.2 }
 ];
 
+const labels = dict_label.map((item) => item.label);
 
-dict_label.forEach((item) => {
-  console.log(item.label, item.accuracy);
-});
 
 function fill_categorie() {
   const ul = document.createElement("ul");
   ul.classList.add("dropdown-menu");
 
-  const labels = dict_label.map((item) => item.label);
-  console.log(labels);
+  
   for (let i = 0; i < labels.length; i++) {
     const li = document.createElement("li");
     li.classList.add("dropdown-item");
@@ -55,10 +63,11 @@ input.addEventListener('change', () => {
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
 
-        let fill_cat = fill_categorie()
+        
         const file_name = file.name;
         const id = "id" + i;
         const func_drop = fill_dropdown(i)
+        const fill_cat = fill_categorie(i)
         if (file) {
             const reader = new FileReader();
           
@@ -66,6 +75,7 @@ input.addEventListener('change', () => {
                 const img = new Image();
                 img.src = reader.result;
                 const card = document.createElement("div")
+                card.classList.add("col-sm");
                 const card_html = `
                   <div class="card" style="width: 12rem;">
                   <img src="${img.src}" id="img_${id}" class="card-img-top" alt="Avatar">
@@ -86,13 +96,13 @@ input.addEventListener('change', () => {
                             <div class="container">
                               <div class="row">
                                 <div class="col-lg-8 col-md-8 col-sm-12">
-                                  <img src="${img.src}" class="img-thumbnail" alt="Avatar">
+                                  <img src="${img.src}" class="img-thumbnail" alt="Avatar" width="200" height="200">
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-12">
                                   <div>
                                     <h5>Choisir le modèle</h5>
-                                    <div  id="id_btn_modele" class="dropdown">
-                                      <button id="btn_id${i}" onclick="select_btn(this, ${i})" name="btn_select" class="btn btn-secondary dropdown-toggle" type="button"data-bs-toggle="dropdown" aria-expanded="false">
+                                    <div class="dropdown">
+                                      <button id="btn_id${i}" onclick="select_btn(this)" name="btn_select" class="btn btn-secondary dropdown-toggle" type="button"data-bs-toggle="dropdown" aria-expanded="false">
                                       Modele
                                       </button>
                                       ${func_drop.outerHTML}
@@ -109,14 +119,10 @@ input.addEventListener('change', () => {
                                       Faire le monitoring
                                     </h5>
                                     <div class="dropdown">
-                                      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Catégorie</button>
+                                      <button id="btn_cat_id${i}" onclick="select_btn(this)" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      Catégorie
+                                      </button>
                                       ${fill_cat.outerHTML}
-                                    </div>
-                                    <div class="input-group mb-3">
-                                      <h5 class="title">
-                                        Crée catégorie
-                                      </h5>
-                                      <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                                     </div>
                                 </div>
                               </div>
@@ -124,7 +130,7 @@ input.addEventListener('change', () => {
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Sauvegarde pour le monitoring</button>
+                            <button onclick="recup_data()" type="button" class="btn btn-primary">Sauvegarde pour le monitoring</button>
                           </div>
                         </div>
                       </div>
@@ -143,15 +149,30 @@ input.addEventListener('change', () => {
       
 );
 
+let txt_model = 'M1'
+let txt_label = ''
 
-function select_btn(button, i) {
-  const dropdownItems = document.querySelectorAll('.dropdown-item.cli' + i);
+function select_btn(button) {
+  const parentDiv = button.parentNode;
   let btn = document.getElementById(button.id)
+  const ulElement = button.nextElementSibling; // Récupérer l'élément ul
+  const dropdownItems = ulElement.querySelectorAll("li");
+  const regex2 = /\s(\S+)$/;
+  // const class_li0 = dropdownItems[0].getAttribute('class');
   dropdownItems.forEach(item => {
     item.addEventListener('click', () => {
       const selectedText = item.textContent.trim();
       btn.textContent = selectedText;
+      if (selectedText.includes("Modele")) txt_model = selectedText.match(regex2)[1];
+      if (selectedText.includes("Label")) txt_label = selectedText.match(regex2)[1];
+      
     });
   });
+  
+}
 
+
+
+function recup_data() {
+  console.log("Recup");
 }

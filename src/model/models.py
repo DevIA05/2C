@@ -20,7 +20,7 @@ class Monitoring(models.Model):
     id = models.AutoField(primary_key=True)
 
     class Meta:
-        managed = False
+
         db_table = 'Monitoring'
 
 
@@ -29,5 +29,5 @@ class MultipleImage(models.Model):
     id = models.AutoField(primary_key=True)
 
     class Meta:
-        managed = False
+
         db_table = 'MultipleImage'

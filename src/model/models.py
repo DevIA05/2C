@@ -31,3 +31,11 @@ class MultipleImage(models.Model):
     class Meta:
 
         db_table = 'MultipleImage'
+
+class Modeles(models.Model):
+    pathmodele = models.TextField(blank=True, null=True)
+    id = models.AutoField(primary_key=True)
+
+    class Meta:
+
+        db_table = 'Modeles'

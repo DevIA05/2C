@@ -24,11 +24,19 @@ def page_model(request):
 
 
 def makesThePrediction(request):
-    imgB64 = request.POST.get('result[image]')
-    imgname = request.POST.get('result[name]')
+
+    # L'image en base 64
+    imgB64 = request.POST.get('result[image]') 
+    image = base64_to_image(imgB64)              # On convertie en image
+    # Le nom de l'image
+    imgname = request.POST.get('result[name]') 
+    # Le modèle séléctionné
+    namemodel = request.POST.get('result[name_model]') 
+    # L'accuracy
     nombre_aleatoire = random.uniform(0.5, 1)
     nombre_arrondi = round(nombre_aleatoire, 2)
-    return JsonResponse({"name": imgname,  "acc": nombre_arrondi})
+
+    return JsonResponse({"acc": nombre_arrondi})
 
 def image_to_base64(path):
     with open(path, "rb") as image_file:

@@ -8,7 +8,7 @@ function show_pred(i) {
     id_btn = i
     const dataURL = imgToBase64("img_id" + id_btn)
 
-    d = {"name": name_img, "image": dataURL}
+    d = {"name_img": name_img, "image": dataURL, "name_model" : txt_model}
     dataRequest(d)
 }
 

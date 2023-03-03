@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 import pdb; #pdb.set_trace()
-from model.models import MultipleImage
+from model.models import MultipleImage, Monitoring
 from django.http import JsonResponse
 import base64
 import io, os

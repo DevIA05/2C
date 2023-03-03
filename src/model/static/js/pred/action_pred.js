@@ -6,9 +6,9 @@ function view_details(button) {
 
 function show_pred(i) {
     id_btn = i
-    const dataURL = imgToBase64("img_id" + id_btn)
+    const strImg = imgToBase64("img_id" + id_btn)
 
-    d = {"name_img": name_img, "image": dataURL, "name_model" : txt_model}
+    d = {"name_img": name_img, "image": strImg, "name_model" : txt_model}
     dataRequest(d)
 }
 
@@ -27,9 +27,9 @@ function imgToBase64(name_img){
     context.drawImage(img, 0, 0);
 
     // Convert the canvas data to a Base64-encoded string
-    const dataURL = canvas.toDataURL('image/png');
+    const strImg = canvas.toDataURL('image/png');
 
-    return dataURL
+    return strImg
 
 }
 
@@ -48,7 +48,6 @@ function dataRequest(d){
         // ------------------- Receiving data from the view -------------------
         success: function (response) {
             const acc = response["acc"]
-            const imgname = response["name"]
             const h5 = document.getElementById("pred_id" + id_btn)
             h5.innerHTML = acc
         },

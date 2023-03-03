@@ -3,6 +3,6 @@ from django.urls import path, re_path
 from . import views
 
 urlpatterns = [
-    path('model', views.page_model, name='page_model'),
+    path('', views.page_model, name='page_model'),
     re_path(r'^makesThePrediction$', views.makesThePrediction),
 ]

@@ -14,36 +14,49 @@ from django.conf import settings
 
 # Create your views here.
 
+# Récupère les images depuis la table MultipleImage et les envoie dans l'onglet image
 def page_model(request):
     path_images = MultipleImage.objects.values_list('pathimg', flat=True)
-    images = []
+    images = [] # Stocke les images 
     for path in path_images:
         file_name = re.search(r'[^\\]+$', path).group()
-        images.append(image_to_base64(path))
+        images.append(image_to_base64(path)) # Converti l'image en base 64 puis l'ajoute à images
     return render(request, 'model.html', {'images': images})
 
 
+#** Effectue la prédiction de l'image en fonction du modèle choisi
 def makesThePrediction(request):
 
     # L'image en base 64
-    imgB64 = request.POST.get('result[image]') 
-    # pdb.set_trace()
-    image = base64_to_image(imgB64)              # On convertie en image
+    imgB64 = request.POST.get('result[image]') # str
+    # pdb.set_trace() 
+    image = base64_to_image(imgB64)            # On convertie en image
     # Le nom de l'image
-    imgname = request.POST.get('result[name]') 
+    imgname = request.POST.get('result[name]')  # str
     # Le modèle séléctionné
-    namemodel = request.POST.get('result[name_model]') 
+    namemodel = request.POST.get('result[name_model]') # str 
     # L'accuracy
-    nombre_aleatoire = random.uniform(0.5, 1)
+    nombre_aleatoire = random.uniform(0.5, 1) 
     nombre_arrondi = round(nombre_aleatoire, 2)
+    # Label
+    label = {"iench": 0.6, "chat": 0.4}
 
-    return JsonResponse({"acc": nombre_arrondi})
+    return JsonResponse({"acc": nombre_arrondi, "label": label})
 
+#** Convert an image to base 64
+# path: str, path of the image
+# return str, the image in base 64
 def image_to_base64(path):
+    # Open the image file in binary read mode ('rb')
     with open(path, "rb") as image_file:
+        # Read the content of the image file and encode it in base64
         encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+    # Return the encoded base64 string
     return encoded_string
 
+#** Converti une chaîne de caractère en base 64 en image
+# base64_string: str, la chaîne de caractère
+# return img,  
 def base64_to_image(base64_string):
     # Decode the Base64 string to bytes
     img_data = base64.b64decode(base64_string.split(',')[1]) # remove the header 'data:image/png;base64'

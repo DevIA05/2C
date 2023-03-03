@@ -10,12 +10,14 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Monitoring(models.Model):
-    pathimg = models.TextField()
-    date = models.DateTimeField()
-    ctgbyuser = models.TextField()
-    ctgbymodel = models.TextField()
-    namemodel = models.TextField()
+    pathimg = models.TextField(null=False, blank=False)
+    date = models.TextField(blank=True, null=True)
+    heure = models.TextField(blank=True, null=True)
+    ctgbyuser = models.TextField(null=False, blank=False)
+    ctgbymodel = models.TextField(null=False, blank=False)
+    namemodel = models.TextField(null=False, blank=False)
     accuracy = models.DecimalField(max_digits=3, decimal_places=2, 
+                                   null=False, blank=False, 
                                    validators=[MinValueValidator(0), MaxValueValidator(1)])
     id = models.AutoField(primary_key=True)
 

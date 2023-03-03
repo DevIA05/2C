@@ -38,15 +38,15 @@ function recup_data(button, i) {
       res_img = res_img.src;
       res_label_model = res_label_model.textContent;
     };
-    stock_data["lblbyuser"] = res_label;
-    stock_data["ctgbyuser"] = res_model;
-    stock_data["imgB64"] = res_img;
-    stock_data["accuracy"] = res_pred;
-    stock_data["date"] = date;
-    stock_data["heure"] = Heure;
-    stock_data["ctgbymodel"] = res_label_model;
+    stock_data["lblbyuser"] = res_label; // Monitoring fait par l'utilisateur
+    stock_data["namemodel"] = res_model; // Nom du modèle
+    stock_data["imgB64"] = res_img; // Image au format 64
+    stock_data["accuracy"] = res_pred; // Précision du modèle
+    stock_data["date"] = date; // Date récupérer
+    stock_data["heure"] = Heure; // Heure récupérer 
+    stock_data["ctgbymodel"] = res_label_model; // Catégorie prédit par le modele
 
-    const url = 'https://example.com/api/my-endpoint/'; // URL de votre endpoint Django
+    const url = 'monitoring'; // URL de votre endpoint Django
     const csrftoken  = $('input[name="csrfmiddlewaretoken"]').val()   // collect token
     
     const options = {

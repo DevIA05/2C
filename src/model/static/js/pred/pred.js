@@ -2,7 +2,7 @@ const input = document.getElementById('images');
 const preview = document.getElementById('container_img');
 const list_modele = ["M1", "M2", "M3"]
 
-
+// Labo pour avoir le nom des modèles et la liste des labels dynamique
 let test_mod = [ {name_Modele : 'M1',
                   list_Label : ['Chien', 'Chat', 'Tortue']},
                   {name_Modele : 'M1',
@@ -131,6 +131,7 @@ input.addEventListener('change', () => {
                                     <div>
                                       <button onclick="show_pred(${i})" class="btn btn-secondary" type="button">Prédire</button>
                                       <h4 id="pred_${id}"></h4>
+                                      <h4 id="label_${id}">Something</h4>
                                       </div>
                                   </div>
                               

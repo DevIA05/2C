@@ -53,7 +53,7 @@ def base64_to_image(base64_string):
     return img
 
 def monitoring(request):
-    if request.method == 'POST':
+    if request.method == 'post':
         # récupérer les données envoyées par le formulaire
         stock_data = request.POST
 
@@ -62,18 +62,16 @@ def monitoring(request):
             pathimg=stock_data['imgB64'], # Image au format 64
             date=stock_data['date'], # Date récuperer
             heure=stock_data['heure'], # Heure récuperer 
-            ctgbyuser=stock_data['ctgbyuser'], # Modele choisi par l'utilisateur
-            ctgbymodel=stock_data['ctgbymodel'], #Prediction du model
-            namemodel=stock_data[''], # Nom du model choisi pour la prédiction
-            accuracy=stock_data['accuracy'], # % de la prédiction
-            lblbyuser=stock_data['lblbyuser'], # Monitoring que donne l'utilisateur
-            
+            ctgbyuser=stock_data['ctgbyuser'], # Label choisi par l'utilisateur pour le monitoring
+            ctgbymodel=stock_data['ctgbymodel'], # Label prédit par le model
+            namemodel=stock_data['namemodel'], # Nom du model choisi pour la prédiction
+            accuracy=stock_data['accuracy'], # % de la prédiction            
         )
 
         # sauvegarder l'instance dans la base de données
         my_instance.save()
 
         # renvoyer une réponse à l'utilisateur
-        return render(request, 'success.html')
-    else:
-        return render(request, 'my_form.html')
+    #     return render(request, 'success.html')
+    # else:
+    #     return render(request, 'my_form.html')

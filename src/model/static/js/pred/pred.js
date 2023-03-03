@@ -63,12 +63,11 @@ function fill_dropdown(id){
   const ul = document.createElement("ul");
   ul.classList.add("dropdown-menu");
 
-  for (let i = 0; i < test_mod.length; i++) {
-    let modele = test_mod[i].name_Modele;
+  for (let i = 0; i < list_modele.length; i++) {
     const li = document.createElement("li");
     li.classList.add("dropdown-item");
     li.classList.add("cli" + id);
-    li.textContent = `Modele: ${modele}`;
+    li.textContent = `Modele: ${list_modele[i]}`;
     ul.appendChild(li);
     
   }

@@ -11,7 +11,22 @@ let test_mod = [ {name_Modele : 'M1',
                   list_Label : ['Chaise', 'Bureau', 'pizza']},
 ];
 
+// // console.log(test_mod[0].list_Label)
+// let array_label = test_mod[0].list_Label
+// let x = array_label.entries()
+// for ( let i of x) {
+//   console.log(i)
+// };
 
+
+// for (let i = 0; i < test_mod.length; i++) {
+//   let name_Modele = test_mod[i].name_Modele;
+//   let list_Label = test_mod[i].list_Label.join(", ");
+//   console.log(`Nom du modèle: ${name_Modele}, et sa liste des labels: ${list_Label}`);
+// };
+ 
+// function test_fill() {  
+// }
 
 const dict_label = [
   { label: "chien", accuracy: 0.5 },
@@ -22,7 +37,11 @@ const dict_label = [
 ];
 
 const labels = dict_label.map((item) => item.label);
+  // console.log(labels);
 
+// dict_label.forEach((item) => {
+//   console.log(item.label, item.accuracy);
+// });
 
 function fill_categorie() {
   const ul = document.createElement("ul");
@@ -130,7 +149,7 @@ input.addEventListener('change', () => {
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button onclick="recup_data()" type="button" class="btn btn-primary">Sauvegarde pour le monitoring</button>
+                            <button onclick="recup_data(this,${i})" type="button" class="btn btn-primary">Sauvegarde pour le monitoring</button>
                           </div>
                         </div>
                       </div>
@@ -154,17 +173,16 @@ let txt_label = ''
 
 function select_btn(button) {
   const parentDiv = button.parentNode;
-  let btn = document.getElementById(button.id)
-  const ulElement = button.nextElementSibling; // Récupérer l'élément ul
+  let btn = document.getElementById(button.id);
+  const ulElement = button.nextElementSibling;
   const dropdownItems = ulElement.querySelectorAll("li");
   const regex2 = /\s(\S+)$/;
-  // const class_li0 = dropdownItems[0].getAttribute('class');
   dropdownItems.forEach(item => {
     item.addEventListener('click', () => {
       const selectedText = item.textContent.trim();
       btn.textContent = selectedText;
-      if (selectedText.includes("Modele")) txt_model = selectedText.match(regex2)[1];
-      if (selectedText.includes("Label")) txt_label = selectedText.match(regex2)[1];
+      // if (selectedText.includes("Modele")) txt_model = selectedText.match(regex2)[1];
+      // if (selectedText.includes("Label")) txt_label = selectedText.match(regex2)[1];
       
     });
   });
@@ -173,6 +191,3 @@ function select_btn(button) {
 
 
 
-function recup_data() {
-  console.log("Recup");
-}

@@ -27,6 +27,7 @@ def makesThePrediction(request):
 
     # L'image en base 64
     imgB64 = request.POST.get('result[image]') 
+    # pdb.set_trace()
     image = base64_to_image(imgB64)              # On convertie en image
     # Le nom de l'image
     imgname = request.POST.get('result[name]') 
@@ -45,9 +46,9 @@ def image_to_base64(path):
 
 def base64_to_image(base64_string):
     # Decode the Base64 string to bytes
-    image_bytes = base64.b64decode(base64_string)
-    # Create a BytesIO object from the bytes
-    image_buffer = io.BytesIO(image_bytes)
-    # Open the image with PIL and return it
-    return Image.open(image_buffer)
+    img_data = base64.b64decode(base64_string.split(',')[1]) # remove the header 'data:image/png;base64'
+    # Create a BytesIO object from the bytes 
+    #  and Open the image with PIL and return it
+    img = Image.open(io.BytesIO(img_data))
+    return img
 

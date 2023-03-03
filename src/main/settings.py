@@ -138,7 +138,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-PATH_IMG_INVALIDED = os.path.join(BASE_DIR, "images\invalided")
-PATH_IMG_POSSESSED = os.path.join(BASE_DIR, "images\possessed")
+PATH_IMG_INVALIDED = os.path.join(BASE_DIR, "images", "invalided")
+PATH_IMG_POSSESSED = os.path.join(BASE_DIR, "images", "possessed")
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # MEDIA_URL = "/media/"

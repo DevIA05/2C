@@ -38,19 +38,19 @@ function recup_data(button, i) {
       res_img = res_img.src;
       res_label_model = res_label_model.textContent;
     };
-    stock_data["lblbyuser"] = res_label; // Monitoring fait par l'utilisateur
-    stock_data["namemodel"] = res_model; // Nom du modèle
     stock_data["imgB64"] = res_img; // Image au format 64
-    stock_data["accuracy"] = res_pred; // Précision du modèle
     stock_data["date"] = date; // Date récupérer
-    stock_data["heure"] = Heure; // Heure récupérer 
-    stock_data["ctgbymodel"] = res_label_model; // Catégorie prédit par le modele
+    stock_data["heure"] = Heure; // Heure récupérer
+    stock_data["ctgbyuser"] = res_label; // Label choisi par l'utilisateur pour le monitoring
+    stock_data["ctgbymodel"] = res_label_model; // Label prédit par le model
+    stock_data["namemodel"] = res_model; // Nom du modèle
+    stock_data["accuracy"] = res_pred; // Précision du modèle
 
     const url = 'monitoring'; // URL de votre endpoint Django
     const csrftoken  = $('input[name="csrfmiddlewaretoken"]').val()   // collect token
     
     const options = {
-      method: 'POST', 
+      method: 'post', 
       headers: { 
         'Content-Type': 'application/json',
         'X-CSRFToken': csrftoken // Inclut le jeton CSRF dans l'en-tête de la requête

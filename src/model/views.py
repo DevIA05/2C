@@ -53,10 +53,11 @@ def base64_to_image(base64_string):
     return img
 
 def monitoring(request):
-    if request.method == 'post':
+    if request.method == "POST":
+        
         # récupérer les données envoyées par le formulaire
         stock_data = request.POST
-
+        # print(stock_data)
         # créer une instance du modèle avec les données reçues
         my_instance = Monitoring(
             pathimg=stock_data['imgB64'], # Image au format 64
@@ -71,7 +72,9 @@ def monitoring(request):
         # sauvegarder l'instance dans la base de données
         my_instance.save()
 
-        # renvoyer une réponse à l'utilisateur
-    #     return render(request, 'success.html')
-    # else:
-    #     return render(request, 'my_form.html')
+       # renvoyer une réponse JSON
+        return JsonResponse({'success': True})
+
+    # Si la méthode HTTP n'est pas POST, renvoyer une réponse HTML
+    # return render(request, 'model.html')
+    return JsonResponse({'success': request.method})

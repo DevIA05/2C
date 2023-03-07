@@ -47,28 +47,25 @@ function recup_data(button, i) {
     stock_data["accuracy"] = res_pred; // Précision du modèle
 
     const url = 'monitoring'; // URL de votre endpoint Django
-    const csrftoken  = $('input[name="csrfmiddlewaretoken"]').val()   // collect token
-    
-    const options = {
-      method: 'post', 
-      headers: { 
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrftoken // Inclut le jeton CSRF dans l'en-tête de la requête
-      }, 
-      body: JSON.stringify(stock_data),
-    };
-    
-    fetch(url, options)
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
+    const csrftoken = $('input[name="csrfmiddlewaretoken"]').val() // collecter le token CSRF
 
-  }
+    $.ajaxSetup({
+      headers: {
+        'X-CSRFToken': csrftoken // Ajouter le token CSRF en tant qu'en-tête
+      }
+    });
 
+    $.ajax({
+      url: url, // l'URL à laquelle envoyer les données.
+      type: "POST", //  la méthode HTTP à utiliser.
+      data: stock_data, // les données à envoyer.
+      success: function(response) { // la fonction à exécuter si la requête est réussie.
+        console.log("Données envoyées avec succès !");
+        console.log(response)
+      },
+      error: function(jqXHR, textStatus, errorThrown) { // la fonction à exécuter si la requête échoue.
+        console.error("Une erreur s'est produite lors de l'envoi des données : " + textStatus, errorThrown);
+      }
+    });
 
-
-
-
-
-
-
+}

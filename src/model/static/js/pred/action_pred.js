@@ -1,17 +1,24 @@
 let name_img; 
 let id_btn;
+
+// Récupère l'attribut name du bouton pour connaître le nom de l'image
 function view_details(button) { 
     name_img = button.getAttribute('name')
 }
 
+// Récupère les informations pour effectuer une prédiction coté serveur
 function show_pred(i) {
     id_btn = i
-    const strImg = imgToBase64("img_id" + id_btn)
-
-    d = {"name_img": name_img, "image": strImg, "name_model" : txt_model}
+    const strImg = imgToBase64("img_id" + id_btn) // Converti l'image en base 64 pour l'envoyer au serveur
+    d = {"name_img": name_img, "image": strImg, "name_model" : txt_model} // Envoie les données sous forme d'un dictionnaire
     dataRequest(d)
 }
 
+//** Converti l'image en base 64
+// * 
+// * @param {str} name_img, id de l'image qu'on souhaite convertir
+// * @returns str, l'image en base 64
+// */
 function imgToBase64(name_img){
     const img = document.getElementById(name_img)
     

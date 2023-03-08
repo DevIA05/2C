@@ -177,11 +177,9 @@ let txt_model = 'M1'
 let txt_label = ''
 
 
-
 function select_btn(button) {
-  const parentDiv = button.parentNode;
-  let btn = document.getElementById(button.id);
-  // console.log(btn.textContent)
+  // Récupération du bouton et de la liste déroulante à partir de l'élément bouton fourni en paramètre
+  const btn = document.getElementById(button.id);
   const ulElement = button.nextElementSibling;
   const dropdownItems = ulElement.querySelectorAll("li");
   
@@ -203,30 +201,25 @@ function select_btn(button) {
     });
   });
 
-  
 }
 
-// Fonction pour update le bouton dropdown de catégorie
+/** Met à jour les catégories dans la liste déroulante
+ * Remplace l'élément html ul par un nouveau comportant des li comportant les catégories du modèle séléctionné 
+ * @param {str} selectedModel, le modèle séléctionné dans la liste déroulante model 
+ * @param {object} btn, l'élément html bouton concernant le model  
+ */ return none
+function updateListLabel(selectedModel, btn) {
 
-function updateListLabel(selectedText) {
+  const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle
+
+  // On récupère l'id du bouton concernant la catégorie puis le bouton lui-même
+  const idBtn_ctg =  btn.id.replace("btn_", "btn_" + "cat" + "_"); 
+  const btn_ctg = document.getElementById(idBtn_ctg)
+
+  const oldUl_ctg = btn_ctg.nextElementSibling;   // On récupère la structure ul en prenant l'élément suivant au bouton btn_ctg
+  const newUl_ctg = fill_categorie(ctg);          // Création de la structure ul comportant les catégories
+  const parent_ctg = btn_ctg.parentNode;          // On récupère l'élément parent de btn_ctg
   
-  const regex2 = /\s(\S+)$/;
-  const selectedModel = selectedText.match(regex2)[1].trim()
-  // console.log(test_mod[selectedModel]);
-  tableau = test_mod[selectedModel];
-  fill_categorie(tableau);
-  
+  parent_ctg.replaceChild(newUl_ctg, oldUl_ctg);
 
-    //   console.log(selectedModel)
-    // let tableau = test_mod[val_btn];
-    // const new_ul = fill_categorie(tableau);
-    // console.log(new_ul)
-    // const parent = btn.parentNode;
-    // const old_ul = btn.nextElementSibling;
-    // parent.replaceChild(new_ul, old_ul);
-
-    // for (let i = 0; i < tableau.length; i++ ){
-    //   value = tableau[i]
-    //   console.log(value)
-// }
 }

@@ -2,31 +2,21 @@ const input = document.getElementById('images');
 const preview = document.getElementById('container_img');
 const list_modele = ["M1", "M2", "M3"]
 
-// Labo pour avoir le nom des modèles et la liste des labels dynamique
-let test_mod = [ {name_Modele : 'M1',
-                  list_Label : ['Chien', 'Chat', 'Tortue']},
-                  {name_Modele : 'M1',
-                  list_Label : ['Clavier', 'Souris', 'Ecran']},
-                  {name_Modele : 'M1',
-                  list_Label : ['Chaise', 'Bureau', 'pizza']},
-];
 
-// // console.log(test_mod[0].list_Label)
-// let array_label = test_mod[0].list_Label
-// let x = array_label.entries()
-// for ( let i of x) {
-//   console.log(i)
+
+let test_mod = {"M1" : ["Chien" , "Chat", "Tortue"],
+                "M2" : ['Clavier', 'Souris', 'Ecran'],
+                "M3" : ['Burger', 'Frite', 'Pizza']
+};
+
+// for (let key in test_mod) {
+//   // console.log(key + ' ' + test_mod[key]);
+//   n_model = key;
+//   n_label = test_mod[key];
+//   for(let i = 0; i < n_label.length; i++ ) {
+//     console.log(n_label[i])
+//   }
 // };
-
-
-// for (let i = 0; i < test_mod.length; i++) {
-//   let name_Modele = test_mod[i].name_Modele;
-//   let list_Label = test_mod[i].list_Label.join(", ");
-//   console.log(`Nom du modèle: ${name_Modele}, et sa liste des labels: ${list_Label}`);
-// };
- 
-// function test_fill() {  
-// }
 
 const dict_label = [
   { label: "chien", accuracy: 0.5 },
@@ -37,37 +27,35 @@ const dict_label = [
 ];
 
 const labels = dict_label.map((item) => item.label);
-  // console.log(labels);
 
-// dict_label.forEach((item) => {
-//   console.log(item.label, item.accuracy);
-// });
 
-function fill_categorie() {
+// Fonction pour le bouton dropdown catégorie
+function fill_categorie(tableau) {
   const ul = document.createElement("ul");
   ul.classList.add("dropdown-menu");
-
-  
-  for (let i = 0; i < labels.length; i++) {
+ 
+  for (let i = 0; i < tableau.length; i++) {
+    console.log(tableau[i])
     const li = document.createElement("li");
     li.classList.add("dropdown-item");
-    li.textContent = `Label: ${labels[i]}`;
+    li.textContent = `Label: ${tableau[i]}`;
     ul.appendChild(li);
     
   }
   return ul
+  
 }
 
-
+// Fonction pour le bouton dropdown Modele
 function fill_dropdown(id){
   const ul = document.createElement("ul");
   ul.classList.add("dropdown-menu");
 
-  for (let i = 0; i < list_modele.length; i++) {
+  for (let key in test_mod) {
     const li = document.createElement("li");
     li.classList.add("dropdown-item");
     li.classList.add("cli" + id);
-    li.textContent = `Modele: ${list_modele[i]}`;
+    li.textContent = `Modele: ${key}`;
     ul.appendChild(li);
     
   }
@@ -81,12 +69,12 @@ input.addEventListener('change', () => {
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-
+        const tableau = []
         
         const file_name = file.name;
         const id = "id" + i;
         const func_drop = fill_dropdown(i)
-        const fill_cat = fill_categorie(i)
+        const fill_cat = fill_categorie(tableau)
         if (file) {
             const reader = new FileReader();
           
@@ -103,7 +91,8 @@ input.addEventListener('change', () => {
                       ${file_name}
                     </h5>
                   
-                    <button onclick="view_details(this)" name="${file_name}" type="button"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal_${id}">Voir détails</button>
+                    <button onclick="view_details(this)" name="${file_name}" type="button"  class="btn btn-primary" data-bs-toggle="modal" 
+                    data-bs-target="#exampleModal_${id}">Voir détails</button>
                     <div class="modal fade" id="exampleModal_${id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-xl">
                         <div class="modal-content">
@@ -121,7 +110,8 @@ input.addEventListener('change', () => {
                                   <div>
                                     <h5>Choisir le modèle</h5>
                                     <div class="dropdown">
-                                      <button id="btn_id${i}" onclick="select_btn(this)" name="btn_select" class="btn btn-secondary dropdown-toggle" type="button"data-bs-toggle="dropdown" aria-expanded="false">
+                                      <button id="btn_id${i}" onclick="select_btn(this)" name="btn_select" class="btn btn-secondary dropdown-toggle" 
+                                      type="button"data-bs-toggle="dropdown" aria-expanded="false">
                                       Modele
                                       </button>
                                       ${func_drop.outerHTML}
@@ -129,7 +119,7 @@ input.addEventListener('change', () => {
                                     
                                     <br><br>
                                     <div>
-                                      <button onclick="show_pred(${i})" class="btn btn-secondary" type="button">Prédire</button>
+                                      <button id="button2${i}" onclick="show_pred(${i})" class="btn btn-secondary" type="button">Prédire</button>
                                       <h4 id="pred_${id}"></h4>
                                       <h4 id="label_${id}">Something</h4>
                                       </div>
@@ -139,7 +129,8 @@ input.addEventListener('change', () => {
                                       Faire le monitoring
                                     </h5>
                                     <div class="dropdown">
-                                      <button id="btn_cat_id${i}" onclick="select_btn(this)" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                      <button id="btn_cat_id${i}" onclick="select_btn(this)" class="btn btn-secondary
+                                      dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                       Catégorie
                                       </button>
                                       ${fill_cat.outerHTML}
@@ -172,23 +163,66 @@ input.addEventListener('change', () => {
 let txt_model = 'M1'
 let txt_label = ''
 
+
+// Fonction pour ecrire le nom du modele ou label dans les bouton dropdown modele et catégorie
+// updateListLabel déclencher quand un event click ce passe sur les élément dans le dropdown de modele
+// selectedText est un tableau avec les labels qui correspond au model
 function select_btn(button) {
   const parentDiv = button.parentNode;
   let btn = document.getElementById(button.id);
+  // console.log(btn.textContent)
   const ulElement = button.nextElementSibling;
   const dropdownItems = ulElement.querySelectorAll("li");
-  const regex2 = /\s(\S+)$/;
+  // for (let i = 0; i < dropdownItems.length; i++) {
+  //   const li = dropdownItems[i];
+  //   li.addEventListener('click', () => {
+  //     console.log(li.textContent.trim());
+  //   });
+  //   // faire quelque chose avec l'élément li, par exemple :
+  //   // console.log(li.textContent.trim());
+  // };
   dropdownItems.forEach(item => {
+    // boucle avec event click pour changer le contenue du bouton par le nom du modèle choisie
     item.addEventListener('click', () => {
       const selectedText = item.textContent.trim();
       btn.textContent = selectedText;
-      // if (selectedText.includes("Modele")) txt_model = selectedText.match(regex2)[1];
-      // if (selectedText.includes("Label")) txt_label = selectedText.match(regex2)[1];
+      updateListLabel(selectedText);
       
     });
+    
+    // if (btn.getAttribute('name').includes('btn_select')) {
+    //   const regex2 = /\s(\S+)$/;
+    //   // console.log(btn.textContent)
+    //   const selectedModel = selectedText.match(regex2)[1].trim()
+    //   console.log(selectedModel)
+    //   // updateListLabel(btn);
+    // }
   });
+
   
 }
 
+// Fonction pour update le bouton dropdown de catégorie
 
+function updateListLabel(selectedText) {
+  
+  const regex2 = /\s(\S+)$/;
+  const selectedModel = selectedText.match(regex2)[1].trim()
+  // console.log(test_mod[selectedModel]);
+  tableau = test_mod[selectedModel];
+  fill_categorie(tableau);
+  
 
+    //   console.log(selectedModel)
+    // let tableau = test_mod[val_btn];
+    // const new_ul = fill_categorie(tableau);
+    // console.log(new_ul)
+    // const parent = btn.parentNode;
+    // const old_ul = btn.nextElementSibling;
+    // parent.replaceChild(new_ul, old_ul);
+
+    // for (let i = 0; i < tableau.length; i++ ){
+    //   value = tableau[i]
+    //   console.log(value)
+// }
+}

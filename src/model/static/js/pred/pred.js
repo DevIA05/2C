@@ -126,7 +126,7 @@ input.addEventListener('change', () => {
                                     <div>
                                       <button id="button2${i}" onclick="show_pred(${i})" class="btn btn-secondary" type="button" style="display:none">Prédire</button>
                                       <h4 id="pred_${id}"></h4>
-                                      <h4 id="label_${id}">Something</h4>
+                                      <h4 id="label_${id}"></h4>
                                       </div>
                                   </div>
 
@@ -187,7 +187,7 @@ function select_btn(button) {
     item.addEventListener('click', () => {
       const selectedText = item.textContent.trim();
       btn.textContent = selectedText;
-      updateListLabel(selectedText);
+      updateListLabel(selectedText,btn);
     });
   });
 
@@ -207,11 +207,11 @@ function select_btn(button) {
  * Remplace l'élément html ul par un nouveau comportant des li comportant les catégories du modèle séléctionné 
  * @param {str} selectedModel, le modèle séléctionné dans la liste déroulante model 
  * @param {object} btn, l'élément html bouton concernant le model  
- */ return none
+ return none */ 
 function updateListLabel(selectedModel, btn) {
-
-  const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle
-
+  let lastTwoChars = selectedModel.substring(selectedModel.length - 2);
+  const ctg = test_mod[lastTwoChars]; // Récupération des catégories selon le nom du modèle
+  
   // On récupère l'id du bouton concernant la catégorie puis le bouton lui-même
   const idBtn_ctg =  btn.id.replace("btn_", "btn_" + "cat" + "_"); 
   const btn_ctg = document.getElementById(idBtn_ctg)

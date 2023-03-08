@@ -35,7 +35,6 @@ function fill_categorie(tableau) {
   ul.classList.add("dropdown-menu");
  
   for (let i = 0; i < tableau.length; i++) {
-    console.log(tableau[i])
     const li = document.createElement("li");
     li.classList.add("dropdown-item");
     li.textContent = `Label: ${tableau[i]}`;
@@ -164,65 +163,60 @@ let txt_model = 'M1'
 let txt_label = ''
 
 
-// Fonction pour ecrire le nom du modele ou label dans les bouton dropdown modele et catégorie
-// updateListLabel déclencher quand un event click ce passe sur les élément dans le dropdown de modele
-// selectedText est un tableau avec les labels qui correspond au model
+/** Met à jour la valeur du bouton
+ * en fonction de l'élément séléctionné dans la liste dropdown
+ * @param {object} button, l'élément html du bouton cliqué
+ */ 
 function select_btn(button) {
-  const parentDiv = button.parentNode;
-  let btn = document.getElementById(button.id);
-  // console.log(btn.textContent)
+  // Récupération du bouton et de la liste déroulante à partir de l'élément bouton fourni en paramètre
+  const btn = document.getElementById(button.id);
   const ulElement = button.nextElementSibling;
   const dropdownItems = ulElement.querySelectorAll("li");
-  // for (let i = 0; i < dropdownItems.length; i++) {
-  //   const li = dropdownItems[i];
-  //   li.addEventListener('click', () => {
-  //     console.log(li.textContent.trim());
-  //   });
-  //   // faire quelque chose avec l'élément li, par exemple :
-  //   // console.log(li.textContent.trim());
-  // };
-  dropdownItems.forEach(item => {
-    // boucle avec event click pour changer le contenue du bouton par le nom du modèle choisie
-    item.addEventListener('click', () => {
-      const selectedText = item.textContent.trim();
-      btn.textContent = selectedText;
-      updateListLabel(selectedText);
-      
-    });
-    
-    // if (btn.getAttribute('name').includes('btn_select')) {
-    //   const regex2 = /\s(\S+)$/;
-    //   // console.log(btn.textContent)
-    //   const selectedModel = selectedText.match(regex2)[1].trim()
-    //   console.log(selectedModel)
-    //   // updateListLabel(btn);
-    // }
-  });
-
   
+  // Attend que l'utilisateur clique sur un élément de la liste déroulante pour récupérer la valeur de l'élément
+  // Récupère la valeur séléctionnée dans la liste déroule et remplace la valeur du bouton par la valeur séléctionnée
+  function waitForClick() {
+    return new Promise(resolve => {
+      dropdownItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const selectedText = item.textContent.trim();
+          btn.textContent = selectedText
+          resolve(selectedText);
+        });
+      });
+    });
+  }
+
+  // Attente de la sélection d'un élément de la liste déroulante pour récupérer la valeur
+  // retourne le nom du modèle 
+  async function getValue() {
+    const selectedText = await waitForClick();
+    const regex2 = /\s(\S+)$/;
+    return selectedText.match(regex2)[1].trim()
+  }
+
+  // Met à jour les catégories disponible dans la liste déroule catégorie selon le modèle séléctionné précédemment 
+  getValue().then(value => { updateListLabel(value, btn) });
+
 }
 
-// Fonction pour update le bouton dropdown de catégorie
+/** Met à jour les catégories dans la liste déroulante
+ * Remplace l'élément html ul par un nouveau comportant des li comportant les catégories du modèle séléctionné 
+ * @param {str} selectedModel, le modèle séléctionné dans la liste déroulante model 
+ * @param {object} btn, l'élément html bouton concernant le model  
+ */ return none
+function updateListLabel(selectedModel, btn) {
 
-function updateListLabel(selectedText) {
+  const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle
+
+  // On récupère l'id du bouton concernant la catégorie puis le bouton lui-même
+  const idBtn_ctg =  btn.id.replace("btn_", "btn_" + "cat" + "_"); 
+  const btn_ctg = document.getElementById(idBtn_ctg)
+
+  const oldUl_ctg = btn_ctg.nextElementSibling;   // On récupère la structure ul en prenant l'élément suivant au bouton btn_ctg
+  const newUl_ctg = fill_categorie(ctg);          // Création de la structure ul comportant les catégories
+  const parent_ctg = btn_ctg.parentNode;          // On récupère l'élément parent de btn_ctg
   
-  const regex2 = /\s(\S+)$/;
-  const selectedModel = selectedText.match(regex2)[1].trim()
-  // console.log(test_mod[selectedModel]);
-  tableau = test_mod[selectedModel];
-  fill_categorie(tableau);
-  
+  parent_ctg.replaceChild(newUl_ctg, oldUl_ctg);
 
-    //   console.log(selectedModel)
-    // let tableau = test_mod[val_btn];
-    // const new_ul = fill_categorie(tableau);
-    // console.log(new_ul)
-    // const parent = btn.parentNode;
-    // const old_ul = btn.nextElementSibling;
-    // parent.replaceChild(new_ul, old_ul);
-
-    // for (let i = 0; i < tableau.length; i++ ){
-    //   value = tableau[i]
-    //   console.log(value)
-// }
 }

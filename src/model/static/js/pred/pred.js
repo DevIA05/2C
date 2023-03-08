@@ -180,8 +180,9 @@ function select_btn(button) {
       dropdownItems.forEach(item => {
         item.addEventListener('click', () => {
           const selectedText = item.textContent.trim();
-          resolve(selectedText);
+          resolve(selectedText);  
         });
+        // item.removeEventListener('click', () => {})
       });
     });
   }
@@ -224,5 +225,7 @@ function updateListLabel(selectedModel, idBtn_model) {
   const parent_ctg = btn_ctg.parentNode;          // On récupère l'élément parent de btn_ctg
   
   parent_ctg.replaceChild(newUl_ctg, oldUl_ctg);
+
+  new bootstrap.Dropdown(btn_ctg).update()
 
 }

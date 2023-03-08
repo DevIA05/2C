@@ -204,7 +204,8 @@ function select_btn(button) {
  * Remplace l'élément html ul par un nouveau comportant des li comportant les catégories du modèle séléctionné 
  * @param {str} selectedModel, le modèle séléctionné dans la liste déroulante model 
  * @param {object} btn, l'élément html bouton concernant le model  
- */ return none
+ * return none
+ */
 function updateListLabel(selectedModel, btn) {
 
   const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle

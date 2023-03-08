@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 import pdb; #pdb.set_trace()
-from model.models import MultipleImage
+from model.models import MultipleImage, Monitoring
 from django.http import JsonResponse
 import base64
 import io, os
@@ -65,3 +65,29 @@ def base64_to_image(base64_string):
     img = Image.open(io.BytesIO(img_data))
     return img
 
+def monitoring(request):
+    if request.method == "POST":
+        
+        # récupérer les données envoyées par le formulaire
+        stock_data = request.POST
+        # print(stock_data)
+        # créer une instance du modèle avec les données reçues
+        my_instance = Monitoring(
+            pathimg=stock_data['imgB64'], # Image au format 64
+            date=stock_data['date'], # Date récuperer
+            heure=stock_data['heure'], # Heure récuperer 
+            ctgbyuser=stock_data['ctgbyuser'], # Label choisi par l'utilisateur pour le monitoring
+            ctgbymodel=stock_data['ctgbymodel'], # Label prédit par le model
+            namemodel=stock_data['namemodel'], # Nom du model choisi pour la prédiction
+            accuracy=stock_data['accuracy'], # % de la prédiction            
+        )
+
+        # sauvegarder l'instance dans la base de données
+        my_instance.save()
+
+       # renvoyer une réponse JSON
+        return JsonResponse({'success': True})
+
+    # Si la méthode HTTP n'est pas POST, renvoyer une réponse HTML
+    # return render(request, 'model.html')
+    return JsonResponse({'success': request.method})

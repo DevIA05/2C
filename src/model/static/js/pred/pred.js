@@ -68,7 +68,7 @@ input.addEventListener('change', () => {
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const tableau = []
+        const tableau = ["a", "b"]
         
         const file_name = file.name;
         const id = "id" + i;
@@ -180,7 +180,6 @@ function select_btn(button) {
       dropdownItems.forEach(item => {
         item.addEventListener('click', () => {
           const selectedText = item.textContent.trim();
-          btn.textContent = selectedText
           resolve(selectedText);
         });
       });
@@ -196,7 +195,14 @@ function select_btn(button) {
   }
 
   // Met à jour les catégories disponible dans la liste déroule catégorie selon le modèle séléctionné précédemment 
-  getValue().then(value => { updateListLabel(value, btn) });
+  const regex = /(?:^|_)(\w+)_\w+$/;
+  const matchId = regex.exec(btn.id);
+  getValue().then(value => { 
+    btn.textContent = value
+    if(matchId[1] == "btn") updateListLabel(value, btn.id)
+  }); 
+
+
 
 }
 
@@ -206,14 +212,13 @@ function select_btn(button) {
  * @param {object} btn, l'élément html bouton concernant le model  
  * return none
  */
-function updateListLabel(selectedModel, btn) {
+function updateListLabel(selectedModel, idBtn_model) {
 
   const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle
 
   // On récupère l'id du bouton concernant la catégorie puis le bouton lui-même
-  const idBtn_ctg =  btn.id.replace("btn_", "btn_" + "cat" + "_"); 
+  const idBtn_ctg =  idBtn_model.replace("btn_", "btn_cat_"); 
   const btn_ctg = document.getElementById(idBtn_ctg)
-
   const oldUl_ctg = btn_ctg.nextElementSibling;   // On récupère la structure ul en prenant l'élément suivant au bouton btn_ctg
   const newUl_ctg = fill_categorie(ctg);          // Création de la structure ul comportant les catégories
   const parent_ctg = btn_ctg.parentNode;          // On récupère l'élément parent de btn_ctg

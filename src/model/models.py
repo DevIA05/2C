@@ -36,6 +36,8 @@ class MultipleImage(models.Model):
 
 class Modeles(models.Model):
     pathmodele = models.TextField(blank=True, null=True)
+    namemodel = models.TextField(null=False, blank=False)
+    listctg = models.TextField(null=False, blank=True)
     id = models.AutoField(primary_key=True)
 
     class Meta:

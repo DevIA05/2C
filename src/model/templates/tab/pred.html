@@ -65,11 +65,7 @@
 </div>
 
 <script>
-console.log("-----------------------------------------");
-const var1 = {{data|safe}}
-console.log(var1)
-{% comment %} const jsonData = {{ data|json_script:"jsonData" }};
-console.log(JSON.parse(jsonData.innerHTML)); {% endcomment %}
+  const data = {{data|safe}}
 </script> 
 
 <script src="{% static 'js/pred/pred.js' %}" ></script>

@@ -31,14 +31,13 @@ def page_model(request):
     modeles = Modeles.objects.all()  # retrieve all objects from the Modeles model
     data = {}
     for m in modeles:
-        data[m.namemodel] = {"acc": m.perf, "listctg": m.listctg}
+        data[m.namemodel] = {"acc": float(m.perf), "listctg": m.listctg}
 
     return render(request, 'model.html', {'images': images, 'data': data})
 
 
 #** Effectue la prédiction de l'image en fonction du modèle choisi
 def makesThePrediction(request):
-
     model, labels, image = loadingElements(request)
     res = predict_image(model = model, labels = labels, image = image)
     return JsonResponse({})

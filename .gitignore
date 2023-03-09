@@ -1,3 +1,7 @@
+# Models
+src/models/*
+!src/models/Lorem.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

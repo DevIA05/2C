@@ -68,12 +68,14 @@ input.addEventListener('change', () => {
     
 
     for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const tableau = createDictionary(data, "listctg")
-        
+        const file      = files[i];
+        const dctg      = createDictionary(data, "listctg")
+        const tableau   = dctg[Object.keys(dctg)[0]].split(", ");
+        const k         = Object.keys(data)
         const file_name = file.name;
-        const id = "id" + i;
-        const func_drop = fill_dropdown(i)
+        const id        = "id" + i;
+        // const func_drop = fill_dropdown(i)
+        const func_drop = fill_categorie(k)
         const fill_cat = fill_categorie(tableau)
         if (file) {
             const reader = new FileReader();
@@ -216,7 +218,8 @@ function select_btn(button) {
  */
 function updateListLabel(selectedModel, idBtn_model) {
 
-  const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle
+  // const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle
+  const ctg = data[selectedModel]["listctg"].split(", ");
 
   // On récupère l'id du bouton concernant la catégorie puis le bouton lui-même
   const idBtn_ctg =  idBtn_model.replace("btn_", "btn_cat_"); 

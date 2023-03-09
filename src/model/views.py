@@ -23,7 +23,8 @@ def page_model(request):
     for path in path_images:
         file_name = re.search(r'[^\\]+$', path).group()
         images.append(image_to_base64(path)) # Converti l'image en base 64 puis l'ajoute à images
-    return render(request, 'model.html', {'images': images, 'data': {}})
+    res = ModeleRequest(request)
+    return render(request, 'model.html', {'images': images, 'data': {}, 'err' : res})
 
 
 #** Effectue la prédiction de l'image en fonction du modèle choisi
@@ -105,3 +106,13 @@ def monitoring(request):
     # Si la méthode HTTP n'est pas POST, renvoyer une réponse HTML
     # return render(request, 'model.html')
     return JsonResponse({'success': request.method})
+
+
+def ModeleRequest(request):
+    sql = '''SELECT COUNT(id) as count, to_char(date_trunc('month', date::date), 'YYYY-mm-dd') as month
+                FROM "Monitoring"
+                GROUP BY month
+                ORDER BY month'''
+    res = Monitoring.objects.raw(sql)
+
+    return res

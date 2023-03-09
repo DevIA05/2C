@@ -9,6 +9,8 @@ let test_mod = {"M1" : ["Chien" , "Chat", "Tortue"],
                 "M3" : ['Burger', 'Frite', 'Pizza']
 };
 
+
+
 // for (let key in test_mod) {
 //   // console.log(key + ' ' + test_mod[key]);
 //   n_model = key;
@@ -61,14 +63,13 @@ function fill_dropdown(id){
   return ul
 }
 
-
 input.addEventListener('change', () => {
     const files = input.files;
     
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const tableau = ["a", "b"]
+        const tableau = createDictionary(data, "listctg")
         
         const file_name = file.name;
         const id = "id" + i;
@@ -228,4 +229,15 @@ function updateListLabel(selectedModel, idBtn_model) {
 
   new bootstrap.Dropdown(btn_ctg).update()
 
+}
+
+
+function createDictionary(data, value) {
+  let dictionary = {};
+  for (let key in data) {
+    if (data.hasOwnProperty(key)) {
+      dictionary[key] = data[key][value];
+    }
+  }
+  return dictionary;
 }

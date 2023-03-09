@@ -18,16 +18,27 @@ from django.conf import settings
 
 # Récupère les images depuis la table MultipleImage et les envoie dans l'onglet image
 def page_model(request):
+
+    # ------------------- Image ----------------------------------
     path_images = MultipleImage.objects.values_list('pathimg', flat=True)
     images = [] # Stocke les images 
     for path in path_images:
         file_name = re.search(r'[^\\]+$', path).group()
         images.append(image_to_base64(path)) # Converti l'image en base 64 puis l'ajoute à images
-    return render(request, 'model.html', {'images': images, 'data': {}})
+
+    # ------------------- Modèle ----------------------------------        
+
+    modeles = Modeles.objects.all()  # retrieve all objects from the Modeles model
+    data = {}
+    for m in modeles:
+        data[m.namemodel] = {"acc": m.perf, "listctg": m.listctg}
+
+    return render(request, 'model.html', {'images': images, 'data': data})
 
 
 #** Effectue la prédiction de l'image en fonction du modèle choisi
 def makesThePrediction(request):
+
     model, labels, image = loadingElements(request)
     res = predict_image(model = model, labels = labels, image = image)
     return JsonResponse({})

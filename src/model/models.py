@@ -36,8 +36,12 @@ class MultipleImage(models.Model):
 
 class Modeles(models.Model):
     pathmodele = models.TextField(blank=True, null=True)
+    namemodel = models.TextField(null=False, blank=True)
+    listctg = models.TextField(null=False, blank=True)
     id = models.AutoField(primary_key=True)
-
+    perf = models.DecimalField(max_digits=3, decimal_places=2, 
+                                   null=False, default=0,
+                                   validators=[MinValueValidator(0), MaxValueValidator(1)])
     class Meta:
 
         db_table = 'Modeles'

@@ -7,14 +7,18 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 print("working dir: " + os.getcwd())
 
-def getpath():
-    path = os.path.join("images","possessed")
-    for file in os.listdir(path):
-        file_path = os.path.join(path, file)
-        MultipleImage.objects.create(pathimg=file_path)
+# ============================================================================
+#                             MultipleImage
+# ============================================================================
+
+# def getpath():
+#     path = os.path.join("images","possessed")
+#     for file in os.listdir(path):
+#         file_path = os.path.join(path, file)
+#         MultipleImage.objects.create(pathimg=file_path)
 
 
-getpath()
+# getpath()
 # def save_image(image, filename):
     
 #     # Create an in-memory buffer

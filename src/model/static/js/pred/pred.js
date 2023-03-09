@@ -186,6 +186,16 @@ function select_btn(button) {
   const btn = document.getElementById(button.id);
   const ulElement = button.nextElementSibling;
   const dropdownItems = ulElement.querySelectorAll("li");
+
+  dropdownItems.forEach((element, index) => {
+ 
+    const button2 = document.querySelector('#button2' + index);
+    // let liClass = dropdownItems.getAttribute("class");
+    // console.log(liClass);
+    element.addEventListener('click', () => {
+      button2.style.display = 'block';
+    });
+  });
   
   // Attend que l'utilisateur clique sur un élément de la liste déroulante pour récupérer la valeur de l'élément
   // Récupère la valeur séléctionnée dans la liste déroule et remplace la valeur du bouton par la valeur séléctionnée

@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 import pdb; #pdb.set_trace()
-from model.models import MultipleImage, Monitoring, Modeles
 from django.http import JsonResponse
 import base64
 import io, os
@@ -10,6 +9,11 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import re
 import tensorflow as tf
 import numpy as np
+
+# ------------------- Modèle ---------------------------------- 
+from model.models import MultipleImage, Monitoring, Modeles
+from django.db.models.functions import TruncMonth, Cast
+from django.db.models import Count, DateField
 
 # from django.conf.settings import PATH_IMG_INVALIDED, PATH_IMG_POSSESSED
 from django.conf import settings
@@ -32,21 +36,45 @@ def page_model(request):
     data = {}
     for m in modeles:
         data[m.namemodel] = {"acc": float(m.perf), "listctg": m.listctg}
+        
+    # ------------------- Monitoring ----------------------------------        
+    nbErrByMonth = Monitoring.objects.annotate(
+        month=TruncMonth(Cast('date', output_field=DateField()))
+        ).values('month'
+                 ).annotate(nb=Count('id')
+                            ).values('month', 'nb')# initialisation des listes
+    varDate = []
+    varNb = []
 
-    return render(request, 'model.html', {'images': images, 'data': data})
+    # boucle pour parcourir les objets
+    for obj in nbErrByMonth:
+        # extraire les valeurs de chaque colonne
+        date = str(obj['month'])
+        nb = obj['nb']
+        # ajouter les valeurs aux listes correspondantes
+        varDate.append(date)
+        varNb.append(nb)
+    
+                 
+    return render(request, 'model.html', {'images': images, 
+                                          'data': data, 
+                                          "date": varDate, "nb": varNb})
 
 
 #** Effectue la prédiction de l'image en fonction du modèle choisi
 def makesThePrediction(request):
-    model, labels, image = loadingElements(request)
-    res = predict_image(model = model, labels = labels, image = image)
-    return JsonResponse({})
+    print("================================================")
+    print("==========     PRÉDICTION  =====================")
+    print("================================================")
+    model, label, image = loadingElements(request)
+    pred = predict_image(model = model, image = image).tolist()[0]
+    res = {"lab": label[np.argmax(pred)], "acc": pred[np.argmax(pred)] }
+    return JsonResponse({"res": res, "pred": pred})
 
 def loadingElements(request):
 
     # ------------------- Image ----------------------------------
     imgB64 = request.POST.get('result[image]') # str
-    # pdb.set_trace() 
     image = base64_to_image(imgB64)            # On convertie en image
     image = image.resize((224, 224))           # Adaptation de la taille de l'image pour correspondre aux entrées du modèle
     # Le nom de l'image
@@ -57,15 +85,16 @@ def loadingElements(request):
     objModele = Modeles.objects.get(namemodel=namemodel)
     pathmodele = objModele.pathmodele
     model = tf.keras.models.load_model(pathmodele) 
-    labels = objModele.listctg
+    labels = objModele.listctg.split(', ')
 
     return model, labels, image
 
-def predict_image(model, labels, image, shape=(224,224)):
+def predict_image(model, image):
     np_image = np.asarray(image)
+    np_image = np_image[:, :, :3]
     predictions = model.predict(np.array([np_image]))
-    label_index = np.argmax(predictions)
-    return labels[label_index]
+    rounded_list = np.round(predictions, 2)
+    return rounded_list
 
 #** Convert an image to base 64
 # path: str, path of the image

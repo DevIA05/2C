@@ -68,7 +68,7 @@ input.addEventListener('change', () => {
 
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const tableau = []
+        const tableau = ["a", "b"]
         
         const file_name = file.name;
         const id = "id" + i;
@@ -177,29 +177,47 @@ let txt_model = 'M1'
 let txt_label = ''
 
 
+/** Met à jour la valeur du bouton
+ * en fonction de l'élément séléctionné dans la liste dropdown
+ * @param {object} button, l'élément html du bouton cliqué
+ */ 
 function select_btn(button) {
   // Récupération du bouton et de la liste déroulante à partir de l'élément bouton fourni en paramètre
   const btn = document.getElementById(button.id);
   const ulElement = button.nextElementSibling;
   const dropdownItems = ulElement.querySelectorAll("li");
   
-  dropdownItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const selectedText = item.textContent.trim();
-      btn.textContent = selectedText;
-      updateListLabel(selectedText,btn);
+  // Attend que l'utilisateur clique sur un élément de la liste déroulante pour récupérer la valeur de l'élément
+  // Récupère la valeur séléctionnée dans la liste déroule et remplace la valeur du bouton par la valeur séléctionnée
+  function waitForClick() {
+    return new Promise(resolve => {
+      dropdownItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const selectedText = item.textContent.trim();
+          resolve(selectedText);  
+        });
+        // item.removeEventListener('click', () => {})
+      });
     });
-  });
+  }
 
-  dropdownItems.forEach((element, index) => {
- 
-    const button2 = document.querySelector('#button2' + index);
-    // let liClass = dropdownItems.getAttribute("class");
-    // console.log(liClass);
-    element.addEventListener('click', () => {
-      button2.style.display = 'block';
-    });
-  });
+  // Attente de la sélection d'un élément de la liste déroulante pour récupérer la valeur
+  // retourne le nom du modèle 
+  async function getValue() {
+    const selectedText = await waitForClick();
+    const regex2 = /\s(\S+)$/;
+    return selectedText.match(regex2)[1].trim()
+  }
+
+  // Met à jour les catégories disponible dans la liste déroule catégorie selon le modèle séléctionné précédemment 
+  const regex = /(?:^|_)(\w+)_\w+$/;
+  const matchId = regex.exec(btn.id);
+  getValue().then(value => { 
+    btn.textContent = value
+    if(matchId[1] == "btn") updateListLabel(value, btn.id)
+  }); 
+
+
 
 }
 
@@ -207,19 +225,21 @@ function select_btn(button) {
  * Remplace l'élément html ul par un nouveau comportant des li comportant les catégories du modèle séléctionné 
  * @param {str} selectedModel, le modèle séléctionné dans la liste déroulante model 
  * @param {object} btn, l'élément html bouton concernant le model  
- return none */ 
-function updateListLabel(selectedModel, btn) {
-  let lastTwoChars = selectedModel.substring(selectedModel.length - 2);
-  const ctg = test_mod[lastTwoChars]; // Récupération des catégories selon le nom du modèle
-  
-  // On récupère l'id du bouton concernant la catégorie puis le bouton lui-même
-  const idBtn_ctg =  btn.id.replace("btn_", "btn_" + "cat" + "_"); 
-  const btn_ctg = document.getElementById(idBtn_ctg)
+ * return none
+ */
+function updateListLabel(selectedModel, idBtn_model) {
 
+  const ctg = test_mod[selectedModel]; // Récupération des catégories selon le nom du modèle
+
+  // On récupère l'id du bouton concernant la catégorie puis le bouton lui-même
+  const idBtn_ctg =  idBtn_model.replace("btn_", "btn_cat_"); 
+  const btn_ctg = document.getElementById(idBtn_ctg)
   const oldUl_ctg = btn_ctg.nextElementSibling;   // On récupère la structure ul en prenant l'élément suivant au bouton btn_ctg
   const newUl_ctg = fill_categorie(ctg);          // Création de la structure ul comportant les catégories
   const parent_ctg = btn_ctg.parentNode;          // On récupère l'élément parent de btn_ctg
   
   parent_ctg.replaceChild(newUl_ctg, oldUl_ctg);
+
+  new bootstrap.Dropdown(btn_ctg).update()
 
 }

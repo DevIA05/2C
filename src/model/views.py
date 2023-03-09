@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 import pdb; #pdb.set_trace()
-from model.models import MultipleImage, Monitoring
+from model.models import MultipleImage, Monitoring, Modeles
 from django.http import JsonResponse
 import base64
 import io, os
@@ -8,6 +8,8 @@ from PIL import Image
 import random
 from django.core.files.uploadedfile import InMemoryUploadedFile
 import re
+import tensorflow as tf
+import numpy as np
 
 # from django.conf.settings import PATH_IMG_INVALIDED, PATH_IMG_POSSESSED
 from django.conf import settings
@@ -21,27 +23,39 @@ def page_model(request):
     for path in path_images:
         file_name = re.search(r'[^\\]+$', path).group()
         images.append(image_to_base64(path)) # Converti l'image en base 64 puis l'ajoute à images
-    return render(request, 'model.html', {'images': images})
+    return render(request, 'model.html', {'images': images, 'data': {}})
 
 
 #** Effectue la prédiction de l'image en fonction du modèle choisi
 def makesThePrediction(request):
+    model, labels, image = loadingElements(request)
+    res = predict_image(model = model, labels = labels, image = image)
+    return JsonResponse({})
 
-    # L'image en base 64
+def loadingElements(request):
+
+    # ------------------- Image ----------------------------------
     imgB64 = request.POST.get('result[image]') # str
     # pdb.set_trace() 
     image = base64_to_image(imgB64)            # On convertie en image
+    image = image.resize((224, 224))           # Adaptation de la taille de l'image pour correspondre aux entrées du modèle
     # Le nom de l'image
     imgname = request.POST.get('result[name]')  # str
-    # Le modèle séléctionné
-    namemodel = request.POST.get('result[name_model]') # str 
-    # L'accuracy
-    nombre_aleatoire = random.uniform(0.5, 1) 
-    nombre_arrondi = round(nombre_aleatoire, 2)
-    # Label
-    label = {"iench": 0.6, "chat": 0.4}
 
-    return JsonResponse({"acc": nombre_arrondi, "label": label})
+    # ------------------- Modèle ----------------------------------
+    namemodel = request.POST.get('result[name_model]') # str
+    objModele = Modeles.objects.get(namemodel=namemodel)
+    pathmodele = objModele.pathmodele
+    model = tf.keras.models.load_model(pathmodele) 
+    labels = objModele.listctg
+
+    return model, labels, image
+
+def predict_image(model, labels, image, shape=(224,224)):
+    np_image = np.asarray(image)
+    predictions = model.predict(np.array([np_image]))
+    label_index = np.argmax(predictions)
+    return labels[label_index]
 
 #** Convert an image to base 64
 # path: str, path of the image

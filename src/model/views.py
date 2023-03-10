@@ -68,8 +68,9 @@ def makesThePrediction(request):
     print("==========     PRÉDICTION  =====================")
     print("================================================")
     model, label, image = loadingElements(request)
-    pred = predict_image(model = model, image = image).tolist()[0]
-    res = {"lab": label[np.argmax(pred)], "acc": pred[np.argmax(pred)] }
+    pred = predict_image(model = model, image = image)
+    ind = pred.index(max(pred)) 
+    res = {"lab": label[ind], "acc": pred[ind] }
     return JsonResponse({"res": res, "pred": pred})
 
 def loadingElements(request):
@@ -93,8 +94,8 @@ def predict_image(model, image):
     np_image = np.asarray(image)
     np_image = np_image[:, :, :3]
     predictions = model.predict(np.array([np_image]))
-    rounded_list = np.round(predictions, 2)
-    return rounded_list
+    res = [round(float(val), 2) for val in predictions[0]]
+    return res
 
 #** Convert an image to base 64
 # path: str, path of the image

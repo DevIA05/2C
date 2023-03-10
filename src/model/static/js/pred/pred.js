@@ -86,8 +86,10 @@ input.addEventListener('change', () => {
                 const card = document.createElement("div")
                 card.classList.add("col-sm");
                 const card_html = `
+
+                <!--    Partie card    -->
                   <div class="card" style="width: 12rem;">
-                  <img src="${img.src}" id="img_${id}" class="card-img-top" alt="Avatar">
+                  <img src="${img.src}" id="img_${id}" class="card-img-top" alt="Avatar" width="200" height="200">
                   <div class="card-body">
                     <h5 class="card-title">
                       ${file_name}
@@ -95,6 +97,8 @@ input.addEventListener('change', () => {
                   
                     <button onclick="view_details(this)" name="${file_name}" type="button"  class="btn btn-primary" data-bs-toggle="modal" 
                     data-bs-target="#exampleModal_${id}">Voir détails</button>
+
+                    <!--    Partie Modal    -->
                     <div class="modal fade" id="exampleModal_${id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-xl">
                         <div class="modal-content">
@@ -120,13 +124,19 @@ input.addEventListener('change', () => {
                                     </div>
                                     
                                     <br><br>
+
+                                    <!--    Bouton Pred et Label    -->
                                     <div>
-                                      <button id="button2${i}" onclick="show_pred(${i})" class="btn btn-secondary" type="button">Prédire</button>
+                                      <button id="button2${i}" onclick="show_pred(${i})" class="btn btn-secondary" type="button" style="display:none">Prédire</button>
                                       <h4 id="pred_${id}"></h4>
-                                      <h4 id="label_${id}">Something</h4>
+                                      <h4 id="label_${id}"></h4>
                                       </div>
                                   </div>
-                              
+
+
+
+                                  <!--    Partie Monitoring    -->
+
                                   <h5 class="button-title">
                                       Faire le monitoring
                                     </h5>
@@ -141,6 +151,10 @@ input.addEventListener('change', () => {
                               </div>
                             </div>
                           </div>
+
+
+                          <!--    Bouton save pour la bdd    -->
+
                           <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button onclick="recup_data(this,${i})" type="button" class="btn btn-primary">Sauvegarde pour le monitoring</button>
@@ -175,6 +189,16 @@ function select_btn(button) {
   const btn = document.getElementById(button.id);
   const ulElement = button.nextElementSibling;
   const dropdownItems = ulElement.querySelectorAll("li");
+
+  dropdownItems.forEach((element, index) => {
+ 
+    const button2 = document.querySelector('#button2' + index);
+    // let liClass = dropdownItems.getAttribute("class");
+    // console.log(liClass);
+    element.addEventListener('click', () => {
+      button2.style.display = 'block';
+    });
+  });
   
   // Attend que l'utilisateur clique sur un élément de la liste déroulante pour récupérer la valeur de l'élément
   // Récupère la valeur séléctionnée dans la liste déroule et remplace la valeur du bouton par la valeur séléctionnée

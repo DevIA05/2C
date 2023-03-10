@@ -144,3 +144,13 @@ def monitoring(request):
     # Si la méthode HTTP n'est pas POST, renvoyer une réponse HTML
     # return render(request, 'model.html')
     return JsonResponse({'success': request.method})
+
+
+def ModeleRequest(request):
+    sql = '''SELECT COUNT(id) as count, to_char(date_trunc('month', date::date), 'YYYY-mm-dd') as month
+                FROM "Monitoring"
+                GROUP BY month
+                ORDER BY month'''
+    res = Monitoring.objects.raw(sql)
+
+    return res

@@ -42,7 +42,8 @@ def page_model(request):
         month=TruncMonth(Cast('date', output_field=DateField()))
         ).values('month'
                  ).annotate(nb=Count('id')
-                            ).values('month', 'nb')# initialisation des listes
+                            ).values('month', 'nb'
+                                     ).order_by('month')
     varDate = []
     varNb = []
 
@@ -86,7 +87,6 @@ def loadingElements(request):
     pathmodele = objModele.pathmodele
     model = tf.keras.models.load_model(pathmodele) 
     labels = objModele.listctg.split(', ')
-
     return model, labels, image
 
 def predict_image(model, image):

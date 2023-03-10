@@ -68,8 +68,10 @@ function dataRequest(d){
         // ------------------- Receiving data from the view -------------------
         success: function (response) {
             const res = response["res"]
-            const h5 = document.getElementById("pred_id" + id_btn)
-            h5.innerHTML = concatElemInDict(res)
+            const h5_Pred = document.getElementById("pred_id" + id_btn)
+            const h5_Label = document.getElementById("label_id" + id_btn)
+            h5_Pred.innerHTML = res['acc']
+            h5_Label.innerHTML = res['lab']
         },
         failure: function () {
             alert("failure");

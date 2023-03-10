@@ -9,6 +9,7 @@ function view_details(button) {
 // Récupère les informations pour effectuer une prédiction coté serveur
 function show_pred(i) {
     id_btn = i
+    const txt_model = document.getElementById("btn_id" + id_btn).textContent
     const strImg = imgToBase64("img_id" + id_btn) // Converti l'image en base 64 pour l'envoyer au serveur
     d = {"name_img": name_img, "image": strImg, "name_model" : txt_model} // Envoie les données sous forme d'un dictionnaire
     dataRequest(d)
@@ -40,6 +41,18 @@ function imgToBase64(name_img){
 
 }
 
+function concatElemInDict(d){
+    let str = "";
+    // Parcourir toutes les clés de l'objet
+    for (let key in d) {
+      // Ajouter la clé et la valeur à la chaîne
+      str += key + ":" + d[key] + ", ";
+    }
+    str = str.slice(0, -2);
+    return str
+}
+
+
 function dataRequest(d){
     const csrf  = $('input[name="csrfmiddlewaretoken"]').val()   // collect token
     // ------------------- Send data to view -------------------
@@ -54,12 +67,14 @@ function dataRequest(d){
         dataType: "json",     // The type of data that you're expecting back from the server.
         // ------------------- Receiving data from the view -------------------
         success: function (response) {
-            const acc = response["acc"]
+            const res = response["res"]
             const h5 = document.getElementById("pred_id" + id_btn)
-            h5.innerHTML = acc
+            h5.innerHTML = concatElemInDict(res)
         },
         failure: function () {
             alert("failure");
         }
     })
   }
+
+

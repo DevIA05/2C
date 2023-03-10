@@ -42,7 +42,8 @@ def page_model(request):
         month=TruncMonth(Cast('date', output_field=DateField()))
         ).values('month'
                  ).annotate(nb=Count('id')
-                            ).values('month', 'nb')# initialisation des listes
+                            ).values('month', 'nb'
+                                     ).order_by('month')# initialisation des listes
     varDate = []
     varNb = []
 

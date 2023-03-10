@@ -50,7 +50,7 @@ def page_model(request):
     # boucle pour parcourir les objets
     for obj in nbErrByMonth:
         # extraire les valeurs de chaque colonne
-        date = str(obj['month'])
+        date = str(obj['month']).rsplit('-', 1)[0]
         nb = obj['nb']
         # ajouter les valeurs aux listes correspondantes
         varDate.append(date)

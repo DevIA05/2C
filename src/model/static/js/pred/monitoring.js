@@ -32,8 +32,8 @@ function recup_data(button, i) {
     const  Heure = heure_h24();
     const date = date_();
     if (res_label.textContent !== null & res_model.textContent !== null) {
-      res_label = res_label.textContent.match(regex2)[1].trim();
-      res_model= res_model.textContent.match(regex2)[1].trim();
+      res_label = res_label.textContent;
+      res_model= res_model.textContent;
       res_pred = res_pred.textContent;
       res_img = res_img.src;
       res_label_model = res_label_model.textContent;

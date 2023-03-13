@@ -124,6 +124,7 @@ def monitoring(request):
         
         # récupérer les données envoyées par le formulaire
         stock_data = request.POST
+        idmodel = Modeles.getIdBy(stock_data['namemodel'])
         # print(stock_data)
         # créer une instance du modèle avec les données reçues
         my_instance = Monitoring(
@@ -132,7 +133,7 @@ def monitoring(request):
             heure=stock_data['heure'], # Heure récuperer 
             ctgbyuser=stock_data['ctgbyuser'], # Label choisi par l'utilisateur pour le monitoring
             ctgbymodel=stock_data['ctgbymodel'], # Label prédit par le model
-            namemodel=stock_data['namemodel'], # Nom du model choisi pour la prédiction
+            idmodel=idmodel, 
             accuracy=stock_data['accuracy'], # % de la prédiction            
         )
 

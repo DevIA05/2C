@@ -15,7 +15,7 @@ class Monitoring(models.Model):
     heure = models.TextField(blank=True, null=True)
     ctgbyuser = models.TextField(null=False, blank=False)
     ctgbymodel = models.TextField(null=False, blank=False)
-    namemodel = models.TextField(null=False, blank=False)
+    idmodele = models.ForeignKey('Modeles', on_delete=models.CASCADE)
     accuracy = models.DecimalField(max_digits=3, decimal_places=2, 
                                    null=False, blank=False, 
                                    validators=[MinValueValidator(0), MaxValueValidator(1)])
@@ -29,6 +29,7 @@ class Monitoring(models.Model):
 class MultipleImage(models.Model):
     pathimg = models.TextField(blank=True, null=True)
     id = models.AutoField(primary_key=True)
+    idmodele = models.ForeignKey('Modeles', on_delete=models.CASCADE)
 
     class Meta:
 
@@ -45,3 +46,14 @@ class Modeles(models.Model):
     class Meta:
 
         db_table = 'Modeles'
+
+    #** Récupère l'id en fonction du nom
+    # name: str, nom du modèle
+    # return id: int, identifiant du modèle
+    @staticmethod
+    def getIdBy(name):
+        try:
+            modele = Modeles.objects.get(namemodel=name)
+            return modele.id
+        except Modeles.DoesNotExist:
+            return None

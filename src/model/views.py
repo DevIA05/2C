@@ -149,6 +149,9 @@ def monitoring(request):
 
         # sauvegarder l'instance dans la base de données
         my_instance.save()
+        latest_id = Monitoring.objects.order_by('-id').first().id
+
+        b64_umg.save(os.path.join(path_inval, latest_id))
 
         # latest_id = Monitoring.objects.order_by('-id').first().id
         # b64_umg.save(os.path.join(path_inval, latest_id))

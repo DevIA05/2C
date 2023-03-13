@@ -14,6 +14,7 @@ import numpy as np
 from model.models import MultipleImage, Monitoring, Modeles
 from django.db.models.functions import TruncMonth, Cast
 from django.db.models import Count, DateField
+from django.db import connection
 
 # from django.conf.settings import PATH_IMG_INVALIDED, PATH_IMG_POSSESSED
 from django.conf import settings
@@ -128,17 +129,18 @@ def base64_to_image(base64_string):
 
 def monitoring(request):
     if request.method == "POST":
-        
+        # pdb.set_trace()
         # récupérer les données envoyées par le formulaire
         stock_data = request.POST
         idmodel = Modeles.getIdBy(stock_data['namemodel'])
         b64_umg = base64_to_image(stock_data['imgB64'])
         path_inval = settings.PATH_IMG_INVALIDED
-        b64_umg.save(os.path.join(path_inval, stock_data['imgB64']))
+        pathImg = os.path.join(path_inval, stock_data["nomimage"])
+        b64_umg.save(pathImg)
         
         # créer une instance du modèle avec les données reçues
         my_instance = Monitoring(
-            pathimg=stock_data['imgB64'], # Image au format 64
+            pathimg=pathImg, 
             date=stock_data['date'], # Date récuperer
             heure=stock_data['heure'], # Heure récuperer 
             ctgbyuser=stock_data['ctgbyuser'], # Label choisi par l'utilisateur pour le monitoring
@@ -149,10 +151,6 @@ def monitoring(request):
 
         # sauvegarder l'instance dans la base de données
         my_instance.save()
-        latest_id = Monitoring.objects.order_by('-id').first().id
-
-        b64_umg.save(os.path.join(path_inval, latest_id))
-
         # latest_id = Monitoring.objects.order_by('-id').first().id
         # b64_umg.save(os.path.join(path_inval, latest_id))
 
@@ -173,3 +171,9 @@ def ModeleRequest(request):
     res = Monitoring.objects.raw(sql)
 
     return res
+
+# def getNextValueId():
+#     with connection.cursor() as cursor:
+#         cursor.execute('SELECT nextval(pg_get_serial_sequence(public.\"Monitoring\", "id"))')
+#         next_id = cursor.fetchone()[0]
+#         return(next_id)

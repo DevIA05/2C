@@ -21,7 +21,14 @@ function heure_h24() {
 
 
 
+
 function recup_data(button, i) {
+
+  const input = document.getElementById('images');
+  const files = input.files;
+  const file      = files[i];
+  const file_name = file.name;
+  console.log(file_name)
     const stock_data = {};
     const regex2 = /\s(\S+)$/;
     let res_label = document.getElementById("btn_cat_id" + i);
@@ -38,6 +45,7 @@ function recup_data(button, i) {
       res_img = res_img.src;
       res_label_model = res_label_model.textContent;
     };
+    stock_data["nomimage"] = file_name; // Nom de l'image
     stock_data["imgB64"] = res_img; // Image au format 64
     stock_data["date"] = date; // Date récupérer
     stock_data["heure"] = Heure; // Heure récupérer

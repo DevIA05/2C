@@ -131,9 +131,8 @@ def monitoring(request):
         idmodel = Modeles.getIdBy(stock_data['namemodel'])
         # print(stock_data)
         b64_umg = base64_to_image(stock_data['imgB64'])
-        print(b64_umg)
+        
         path_inval = settings.PATH_IMG_INVALIDED
-        b64_umg.save(os.path.join(path_inval))
         
         # créer une instance du modèle avec les données reçues
         my_instance = Monitoring(
@@ -148,6 +147,9 @@ def monitoring(request):
 
         # sauvegarder l'instance dans la base de données
         my_instance.save()
+        latest_id = Monitoring.objects.order_by('-id').first().id
+
+        b64_umg.save(os.path.join(path_inval, latest_id))
 
 
        # renvoyer une réponse JSON

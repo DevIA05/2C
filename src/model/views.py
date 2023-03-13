@@ -38,12 +38,15 @@ def page_model(request):
         data[m.namemodel] = {"acc": float(m.perf), "listctg": m.listctg}
         
     # ------------------- Monitoring ----------------------------------        
-    nbErrByMonth = Monitoring.objects.annotate(
-        month=TruncMonth(Cast('date', output_field=DateField()))
-        ).values('month'
-                 ).annotate(nb=Count('id')
-                            ).values('month', 'nb'
-                                     ).order_by('month')
+    nbErrByMonth = Monitoring.objects.annotate(                  # Ajoute une colonne calculée à chaque objet retourné.
+        month=TruncMonth(Cast('date', output_field=DateField())) # Crée une nouvelle colonne "month" et on utilise la fonction TruncMonth pour tronquer la date à son mois, 
+                                                                 #   et la fonction Cast pour convertir le champ texte "date" en un champ de type "date", grâce à 
+                                                                 #   l'output_field DateField(). Cela permettra de grouper les résultats par mois.
+        ).values('month'                                         # On spécifie ensuite qu'on veut récupérer seulement les valeurs de la colonne "month".
+                 ).annotate(nb=Count('id')                       # On utilise la méthode annotate une deuxième fois pour ajouter une autre colonne calculée "nb" qui 
+                                                                 #   correspondra au nombre de Monitoring effectués chaque mois.
+                            ).values('month', 'nb'               # On spécifie qu'on veut récupérer les valeurs des colonnes "month" et "nb".
+                                     ).order_by('month')         # On ordonne les résultats par ordre croissant de la colonne "month".
     varDate = []
     varNb = []
 
@@ -129,11 +132,9 @@ def monitoring(request):
         # récupérer les données envoyées par le formulaire
         stock_data = request.POST
         idmodel = Modeles.getIdBy(stock_data['namemodel'])
-        # print(stock_data)
         b64_umg = base64_to_image(stock_data['imgB64'])
-        print(b64_umg)
         path_inval = settings.PATH_IMG_INVALIDED
-        b64_umg.save(os.path.join(path_inval))
+        b64_umg.save(os.path.join(path_inval, stock_data['imgB64']))
         
         # créer une instance du modèle avec les données reçues
         my_instance = Monitoring(
@@ -148,6 +149,9 @@ def monitoring(request):
 
         # sauvegarder l'instance dans la base de données
         my_instance.save()
+
+        # latest_id = Monitoring.objects.order_by('-id').first().id
+        # b64_umg.save(os.path.join(path_inval, latest_id))
 
 
        # renvoyer une réponse JSON

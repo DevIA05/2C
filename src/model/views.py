@@ -92,7 +92,11 @@ def loadingElements(request):
 
 def predict_image(model, image):
     np_image = np.asarray(image)
-    np_image = np_image[:, :, :3]
+    np_image = np_image[:, :, :3] #  Permet donc de créer une nouvelle image qui ne contient que les trois 
+                                  #    premiers canaux de couleur (R, G et B) de l'image d'origine. 
+                                  #    Le quatrième canal Alpha (A) représente la transparence ou l'opacité du pixel, 
+                                  #    où une valeur de 0 indique une transparence totale (pixel entièrement transparent) 
+                                  #    et une valeur de 255 indique une opacité totale (pixel entièrement opaque).
     predictions = model.predict(np.array([np_image]))
     res = [round(float(val), 2) for val in predictions[0]]
     return res
@@ -133,12 +137,13 @@ def monitoring(request):
             heure=stock_data['heure'], # Heure récuperer 
             ctgbyuser=stock_data['ctgbyuser'], # Label choisi par l'utilisateur pour le monitoring
             ctgbymodel=stock_data['ctgbymodel'], # Label prédit par le model
-            idmodel=idmodel, 
+            idmodele=Modeles.objects.get(id=idmodel), 
             accuracy=stock_data['accuracy'], # % de la prédiction            
         )
 
         # sauvegarder l'instance dans la base de données
         my_instance.save()
+
 
        # renvoyer une réponse JSON
         return JsonResponse({'success': True})

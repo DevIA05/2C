@@ -14,6 +14,7 @@ import numpy as np
 from model.models import MultipleImage, Monitoring, Modeles
 from django.db.models.functions import TruncMonth, Cast
 from django.db.models import Count, DateField
+from django.db import connection
 
 # from django.conf.settings import PATH_IMG_INVALIDED, PATH_IMG_POSSESSED
 from django.conf import settings
@@ -38,19 +39,22 @@ def page_model(request):
         data[m.namemodel] = {"acc": float(m.perf), "listctg": m.listctg}
         
     # ------------------- Monitoring ----------------------------------        
-    nbErrByMonth = Monitoring.objects.annotate(
-        month=TruncMonth(Cast('date', output_field=DateField()))
-        ).values('month'
-                 ).annotate(nb=Count('id')
-                            ).values('month', 'nb'
-                                     ).order_by('month')# initialisation des listes
+    nbErrByMonth = Monitoring.objects.annotate(                  # Ajoute une colonne calculée à chaque objet retourné.
+        month=TruncMonth(Cast('date', output_field=DateField())) # Crée une nouvelle colonne "month" et on utilise la fonction TruncMonth pour tronquer la date à son mois, 
+                                                                 #   et la fonction Cast pour convertir le champ texte "date" en un champ de type "date", grâce à 
+                                                                 #   l'output_field DateField(). Cela permettra de grouper les résultats par mois.
+        ).values('month'                                         # On spécifie ensuite qu'on veut récupérer seulement les valeurs de la colonne "month".
+                 ).annotate(nb=Count('id')                       # On utilise la méthode annotate une deuxième fois pour ajouter une autre colonne calculée "nb" qui 
+                                                                 #   correspondra au nombre de Monitoring effectués chaque mois.
+                            ).values('month', 'nb'               # On spécifie qu'on veut récupérer les valeurs des colonnes "month" et "nb".
+                                     ).order_by('month')         # On ordonne les résultats par ordre croissant de la colonne "month".
     varDate = []
     varNb = []
 
     # boucle pour parcourir les objets
     for obj in nbErrByMonth:
         # extraire les valeurs de chaque colonne
-        date = str(obj['month'])
+        date = str(obj['month']).rsplit('-', 1)[0]
         nb = obj['nb']
         # ajouter les valeurs aux listes correspondantes
         varDate.append(date)
@@ -68,8 +72,9 @@ def makesThePrediction(request):
     print("==========     PRÉDICTION  =====================")
     print("================================================")
     model, label, image = loadingElements(request)
-    pred = predict_image(model = model, image = image).tolist()[0]
-    res = {"lab": label[np.argmax(pred)], "acc": pred[np.argmax(pred)] }
+    pred = predict_image(model = model, image = image)
+    ind = pred.index(max(pred)) 
+    res = {"lab": label[ind], "acc": pred[ind] }
     return JsonResponse({"res": res, "pred": pred})
 
 def loadingElements(request):
@@ -87,15 +92,18 @@ def loadingElements(request):
     pathmodele = objModele.pathmodele
     model = tf.keras.models.load_model(pathmodele) 
     labels = objModele.listctg.split(', ')
-
     return model, labels, image
 
 def predict_image(model, image):
     np_image = np.asarray(image)
-    np_image = np_image[:, :, :3]
+    np_image = np_image[:, :, :3] #  Permet donc de créer une nouvelle image qui ne contient que les trois 
+                                  #    premiers canaux de couleur (R, G et B) de l'image d'origine. 
+                                  #    Le quatrième canal Alpha (A) représente la transparence ou l'opacité du pixel, 
+                                  #    où une valeur de 0 indique une transparence totale (pixel entièrement transparent) 
+                                  #    et une valeur de 255 indique une opacité totale (pixel entièrement opaque).
     predictions = model.predict(np.array([np_image]))
-    rounded_list = np.round(predictions, 2)
-    return rounded_list
+    res = [round(float(val), 2) for val in predictions[0]]
+    return res
 
 #** Convert an image to base 64
 # path: str, path of the image
@@ -121,23 +129,31 @@ def base64_to_image(base64_string):
 
 def monitoring(request):
     if request.method == "POST":
-        
+        # pdb.set_trace()
         # récupérer les données envoyées par le formulaire
         stock_data = request.POST
-        # print(stock_data)
+        idmodel = Modeles.getIdBy(stock_data['namemodel'])
+        b64_umg = base64_to_image(stock_data['imgB64'])
+        path_inval = settings.PATH_IMG_INVALIDED
+        pathImg = os.path.join(path_inval, stock_data["nomimage"])
+        b64_umg.save(pathImg)
+        
         # créer une instance du modèle avec les données reçues
         my_instance = Monitoring(
-            pathimg=stock_data['imgB64'], # Image au format 64
+            pathimg=pathImg, 
             date=stock_data['date'], # Date récuperer
             heure=stock_data['heure'], # Heure récuperer 
             ctgbyuser=stock_data['ctgbyuser'], # Label choisi par l'utilisateur pour le monitoring
             ctgbymodel=stock_data['ctgbymodel'], # Label prédit par le model
-            namemodel=stock_data['namemodel'], # Nom du model choisi pour la prédiction
+            idmodele=Modeles.objects.get(id=idmodel), 
             accuracy=stock_data['accuracy'], # % de la prédiction            
         )
 
         # sauvegarder l'instance dans la base de données
         my_instance.save()
+        # latest_id = Monitoring.objects.order_by('-id').first().id
+        # b64_umg.save(os.path.join(path_inval, latest_id))
+
 
        # renvoyer une réponse JSON
         return JsonResponse({'success': True})
@@ -155,3 +171,9 @@ def ModeleRequest(request):
     res = Monitoring.objects.raw(sql)
 
     return res
+
+# def getNextValueId():
+#     with connection.cursor() as cursor:
+#         cursor.execute('SELECT nextval(pg_get_serial_sequence(public.\"Monitoring\", "id"))')
+#         next_id = cursor.fetchone()[0]
+#         return(next_id)

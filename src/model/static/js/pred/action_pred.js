@@ -70,10 +70,8 @@ function dataRequest(d){
             const res = response["res"]
             const h5_Pred = document.getElementById("pred_id" + id_btn)
             const h5_Label = document.getElementById("label_id" + id_btn)
-
-            h5_Pred.innerHTML = concatElemInDict(res['acc'])
-            h5_Label.innerHTML = concatElemInDict(res['lab'])
-
+            h5_Pred.innerHTML = res['acc']
+            h5_Label.innerHTML = res['lab']
         },
         failure: function () {
             alert("failure");

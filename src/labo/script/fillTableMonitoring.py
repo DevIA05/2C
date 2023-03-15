@@ -1,4 +1,4 @@
-from model.models import Monitoring
+from model.models import Monitoring, Modeles
 import os
 import random
 import datetime
@@ -32,7 +32,8 @@ for i in range(2000):
     date = random_date(start_date, end_date)
     k = random.choice(list(d.keys()))
     v = random.choice(d[k])
-    Monitoring.objects.create(date = date.strftime('%d/%m/%Y'), namemodel = random.choice(list(d.keys())), 
-                              ctgbyuser = v, pathimg= "( ^_^)／ ", ctgbymodel= "(╯ರ ~ ರ)╯︵┻━┻",
+    idm = random.choice([1, 2])
+    Monitoring.objects.create(date = date.strftime('%d/%m/%Y'), idmodele=Modeles.objects.get(id=idm), 
+                              ctgbyuser = v, pathimg= "( ^_^)／ 凸(｀0´)凸", ctgbymodel= "(╯ರ ~ ರ)╯︵┻━┻ ",
                               accuracy=random.random())
     print("ajouté: " + str(i))

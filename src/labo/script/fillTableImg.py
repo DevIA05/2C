@@ -1,9 +1,6 @@
-#from labo.models import MultipleImage
-from model.models import MultipleImage
+from model.models import MultipleImage, Modeles
 import os
-from PIL import Image
-import io
-from django.core.files.uploadedfile import InMemoryUploadedFile
+import random
 
 print("working dir: " + os.getcwd())
 
@@ -11,14 +8,15 @@ print("working dir: " + os.getcwd())
 #                             MultipleImage
 # ============================================================================
 
-# def getpath():
-#     path = os.path.join("images","possessed")
-#     for file in os.listdir(path):
-#         file_path = os.path.join(path, file)
-#         MultipleImage.objects.create(pathimg=file_path)
+def getpath():
+    path = os.path.join("images","possessed")
+    for file in os.listdir(path):
+        file_path = os.path.join(path, file)
+        idm = random.choice([1, 2])
+        MultipleImage.objects.create(pathimg=file_path, idmodele=Modeles.objects.get(id=idm))
 
 
-# getpath()
+getpath()
 # def save_image(image, filename):
     
 #     # Create an in-memory buffer
